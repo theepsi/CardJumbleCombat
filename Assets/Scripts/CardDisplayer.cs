@@ -13,6 +13,7 @@ public class CardDisplayer : MonoBehaviour {
 
     public void InitCard (Card card)
     {
+        transform.DORestart();
         this.card = card;
         selected = false;
 
@@ -31,6 +32,10 @@ public class CardDisplayer : MonoBehaviour {
 
         artwork.sprite = card.artwork;
         description.text = card.description;
+
+        transform.DOScale(new Vector3(1f, 1f, 1f), .5f);
+        transform.DOLocalMoveY(0, .5f);
+
     }
 
     public void HoverCard()
