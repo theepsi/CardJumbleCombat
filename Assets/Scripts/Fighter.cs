@@ -7,7 +7,7 @@ public class Fighter {
     public int maxHealth = 150;
     public int maxGauge = 50;
 
-    public List<Card> Hand { get { return hand; } }
+    public Card[] Hand { get { return hand; } }
 
     public Sprite artWork;
 
@@ -17,7 +17,7 @@ public class Fighter {
     private int currentGauge;
 
     private Stack<Card> deck;
-    private List<Card> hand;
+    private Card[] hand;
     private int maxCardHand = 6;
     private int cardsHand = 0;
 
@@ -26,7 +26,7 @@ public class Fighter {
     public void Init(Stack<Card> deck)
     {
         this.deck = deck;
-        hand = new List<Card>();
+        hand = new Card[maxCardHand];
         GetCards();
     }
 
@@ -51,10 +51,10 @@ public class Fighter {
 
     public bool CheckCards(List<Card> cardsToPlay)
     {
-        if (!hasOneCardOfType(CardType.COMBO_INIT, cardsToPlay)) return false;
+        if (!hasOneCardOfType(CardType.COMBO_INIT, cardsToPlay.ToArray())) return false;
         else
         {
-            if (hasOneCardOfType(CardType.COMBO_FINISHER, cardsToPlay) && !hasMiddleCards(cardsToPlay)) return false;
+            if (hasOneCardOfType(CardType.COMBO_FINISHER, cardsToPlay.ToArray()) && !hasMiddleCards(cardsToPlay)) return false;
         }
 
         return true;
@@ -89,15 +89,27 @@ public class Fighter {
     private void DiscardCards(List<Card> cardsToDiscard)
     {
         //TODO: Discard or queue to deck(?)
-        hand = hand.Except(cardsToDiscard).ToList();
-        cardsHand = hand.Count;
+        //hand = hand.Except(cardsToDiscard).ToList();
+        for (int i = 0; i < cardsToDiscard.Count; ++i)
+        {
+            hand[cardsToDiscard[i].indexAtHand] = null;
+            cardsHand--;
+        }
     }
 
     private void GetCards()
     {
+        List<int> emptyIndex = new List<int>();
+        for (int i = 0; i < hand.Length; ++i)
+        {
+            if (hand[i] == null) emptyIndex.Add(i);
+        }
+
+        int index = 0;
         while (cardsHand < maxCardHand && deck.Count > 0)
         {
-            hand.Add(deck.Pop());
+            hand[emptyIndex[index]] = deck.Pop();
+            index++;
             cardsHand++;
         }
 
@@ -105,11 +117,11 @@ public class Fighter {
         PrintHand();
     }
 
-    private bool hasOneCardOfType(CardType type, List<Card> list)
+    private bool hasOneCardOfType(CardType type, Card[] list)
     {
         int count = 0;
 
-        for (int i = 0; i < list.Count; ++i)
+        for (int i = 0; i < list.Length; ++i)
         {
             if (list[i].type == type) count++;
 
@@ -133,7 +145,7 @@ public class Fighter {
 
     private void PrintHand()
     {
-        for (int i = 0; i < hand.Count; ++i)
+        for (int i = 0; i < hand.Length; ++i)
         {
            hand[i].Print();
         }

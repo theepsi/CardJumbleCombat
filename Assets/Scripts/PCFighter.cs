@@ -22,14 +22,14 @@ public class PCFighter {
 
     private List<List<Card>> GenerateAllCombinations()
     {
-        List<Card> hand = fighter.Hand;
+        Card[] hand = fighter.Hand;
         List<List<Card>> possibleCombinations = new List<List<Card>>();
 
         List<Card> initCards = new List<Card>();
         List<Card> middleCards = new List<Card>();
         List<Card> finisherCards = new List<Card>();
 
-        for (int i = 0; i < hand.Count; ++i)
+        for (int i = 0; i < hand.Length; ++i)
         {
             if (hand[i].type == CardType.COMBO_INIT) initCards.Add(hand[i]);
             else if (hand[i].type == CardType.COMBO_MIDDLE) middleCards.Add(hand[i]);

@@ -203,15 +203,16 @@ public class Game : MonoBehaviour {
         Debug.Log("ChangeState to " + currentState.ToString());
     }
 
-    private void DisplayPlayerHand(List<Card> hand)
+    private void DisplayPlayerHand(Card[] hand)
     {
         CleanHand();
 
-        for (int i = 0; i < hand.Count; ++i)
+        for (int i = 0; i < hand.Length; ++i)
         {
             GameObject card = ObjectPooler.Instance.GetPooledObject("Card");
 
             card.transform.SetParent(handReference);
+            hand[i].indexAtHand = i;
             card.GetComponent<CardDisplayer>().InitCard(hand[i]);
             card.SetActive(true);
         }
