@@ -1254,6 +1254,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 570664002}
   handReference: {fileID: 1708044328}
+  availableInitCards:
+  - {fileID: 11400000, guid: 1fe9dd0d0c9a9e44ab0c83eee1005b1c, type: 2}
+  - {fileID: 11400000, guid: 6d60943cde4b2a54d900d984823cf869, type: 2}
+  - {fileID: 11400000, guid: 01997dc3c33f8f844a2e4551f4a63e90, type: 2}
+  availableMiddleCards:
+  - {fileID: 11400000, guid: ac79deba575c073468749dc608e4e63e, type: 2}
+  - {fileID: 11400000, guid: 021e0f9bdbb93d34f9d969db15873934, type: 2}
+  - {fileID: 11400000, guid: 3921ae1a199f7804d8a5742ca7a5aee3, type: 2}
+  - {fileID: 11400000, guid: c7503aedceb8bd94b95b0cbe1137c207, type: 2}
+  - {fileID: 11400000, guid: c187f80272f173e4a91ef0a18d566324, type: 2}
+  - {fileID: 11400000, guid: 6d4c1c999d63abe40a5a62913edcb9ab, type: 2}
+  - {fileID: 11400000, guid: 340d51b43f810cb449f45ac8c1054c9d, type: 2}
+  - {fileID: 11400000, guid: f2ad638b0c4117449a90438c0c6e669c, type: 2}
+  availableFinisherCards:
+  - {fileID: 11400000, guid: b7affcb3f2afa254c964705fbb9d3d04, type: 2}
+  - {fileID: 11400000, guid: b75b2b11f0647b744b874c702a567914, type: 2}
+  - {fileID: 11400000, guid: 9dccdfd4a8accc94cbf5bbd3aab5f369, type: 2}
 --- !u!4 &2005932980
 Transform:
   m_ObjectHideFlags: 0

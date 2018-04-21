@@ -4,7 +4,9 @@ using UnityEngine;
 public class Fighter {
 
     public int maxHealth = 150;
-    public int maxGauge = 100;
+    public int maxGauge = 50;
+
+    public List<Card> Hand { get { return hand; } }
 
     public Sprite artWork;
 
@@ -13,22 +15,24 @@ public class Fighter {
     private int currentHealth;
     private int currentGauge;
 
-    private Queue<Card> deck;
+    private Stack<Card> deck;
     private List<Card> hand;
     private int maxCardHand = 6;
     private int cardsHand = 0;
 
-    private float defensePoints = 0;
+    private float defensePoints = 1;
 
-    public void Init(Queue<Card> deck)
+    public void Init(Stack<Card> deck)
     {
         this.deck = deck;
+        hand = new List<Card>();
         getCards();
     }
 
     public int PlayCards(List<Card> cardsToPlay)
     {
         int damage = 0;
+        defensePoints = 1;
 
         for (int i = 0; i < cardsToPlay.Count; ++i)
         {
@@ -36,6 +40,8 @@ public class Fighter {
         }
 
         hand.RemoveAll(x => cardsToPlay.Contains(x));
+
+        currentGauge += damage;
 
         return damage;
     }
@@ -71,18 +77,28 @@ public class Fighter {
         getCards();
     }
 
+    public void ApplyDamage(int damage)
+    {
+        currentHealth -= Mathf.RoundToInt(damage * defensePoints);
+    }
+
     private void DiscardCards(List<Card> cardsToDiscard)
     {
         //TODO: Discard or queue to deck(?)
         hand.RemoveAll(x => cardsToDiscard.Contains(x));
+        cardsHand = hand.Count;
     }
 
     private void getCards()
     {
         while (cardsHand < maxCardHand && deck.Count > 0)
         {
-            hand.Add(deck.Dequeue());
+            hand.Add(deck.Pop());
+            cardsHand++;
         }
+
+        Debug.Log("Just draw cards, remaining cards: " + deck.Count);
+        PrintHand();
     }
 
     private bool hasOneCardOfType(CardType type)
@@ -107,5 +123,13 @@ public class Fighter {
         }
 
         return false;
+    }
+
+    private void PrintHand()
+    {
+        for (int i = 0; i < hand.Count; ++i)
+        {
+           hand[i].Print();
+        }
     }
 }

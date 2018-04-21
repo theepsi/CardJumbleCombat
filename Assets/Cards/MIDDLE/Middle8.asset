@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: Middle8
   m_EditorClassIdentifier: 
   artwork: {fileID: 21300000, guid: c0cf69f1d04db734fb97c4abd37adccc, type: 3}
-  description: "middle de 8 da\xF1o"
+  description: 8 Damage
   damage: 8
   type: 1

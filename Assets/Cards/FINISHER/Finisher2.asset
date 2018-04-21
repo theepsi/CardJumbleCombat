@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: Finisher2
   m_EditorClassIdentifier: 
   artwork: {fileID: 21300000, guid: b9f09911b95a0994b8308016f1e477a3, type: 3}
-  description: BUAHH
+  description: 10 Damage
   damage: 10
   type: 2

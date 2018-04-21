@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: Middle2
   m_EditorClassIdentifier: 
   artwork: {fileID: 21300000, guid: e677255bd5f1be9439041912e948a01a, type: 3}
-  description: "middle de 2 da\xF1o"
+  description: 2 Damage
   damage: 2
   type: 1

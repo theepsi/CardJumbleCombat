@@ -10,19 +10,11 @@ public class CardDisplayer : MonoBehaviour {
     public Image artwork;
     public Text description;
 
-    public Card card;
-
     public bool selected;
 
     private Outline outline;
 
-    //DELETE, ONLY FOR DEBUG
-    private void Awake()
-    {
-        InitCard();
-    }
-
-    public void InitCard ()
+    public void InitCard (Card card)
     {
         outline = GetComponent<Outline>();
         outline.enabled = false;
@@ -32,7 +24,7 @@ public class CardDisplayer : MonoBehaviour {
                 cardCover.sprite = Resources.Load<Sprite>("BaseCards/InitCard");
                 break;
             case CardType.COMBO_MIDDLE:
-                cardCover.sprite = Resources.Load<Sprite>("BaseCards/MidleCard");
+                cardCover.sprite = Resources.Load<Sprite>("BaseCards/MiddleCard");
                 break;
             case CardType.COMBO_FINISHER:
                 cardCover.sprite = Resources.Load<Sprite>("BaseCards/FinisherCard");

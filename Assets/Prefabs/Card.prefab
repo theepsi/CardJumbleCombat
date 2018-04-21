@@ -258,7 +258,7 @@ MonoBehaviour:
   cardCover: {fileID: 114786937304728766}
   artwork: {fileID: 114570079943733176}
   description: {fileID: 114705099316101870}
-  card: {fileID: 11400000, guid: b75b2b11f0647b744b874c702a567914, type: 2}
+  card: {fileID: 0}
   selected: 0
 --- !u!222 &222386834286650090
 CanvasRenderer:

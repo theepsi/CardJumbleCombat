@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: Init2
   m_EditorClassIdentifier: 
   artwork: {fileID: 21300000, guid: cae772e3691671b428e0b72f09eb59db, type: 3}
-  description: "init 2 de da\xF1o"
+  description: 2 Damage
   damage: 2
   type: 0
