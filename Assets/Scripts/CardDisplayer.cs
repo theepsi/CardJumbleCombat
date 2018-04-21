@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
@@ -9,11 +7,13 @@ public class CardDisplayer : MonoBehaviour {
     public Image cardCover;
     public Image artwork;
     public Text description;
+    public Card card;
 
     public bool selected;
 
     public void InitCard (Card card)
     {
+        this.card = card;
         selected = false;
 
         switch (card.type)

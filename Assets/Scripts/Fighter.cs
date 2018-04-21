@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Fighter {
 
@@ -26,7 +27,7 @@ public class Fighter {
     {
         this.deck = deck;
         hand = new List<Card>();
-        getCards();
+        GetCards();
     }
 
     public int PlayCards(List<Card> cardsToPlay)
@@ -39,19 +40,23 @@ public class Fighter {
             damage += cardsToPlay[i].damage;
         }
 
-        hand.RemoveAll(x => cardsToPlay.Contains(x));
+        hand = hand.Except(cardsToPlay).ToList();
 
         currentGauge += damage;
+
+        cardsHand = hand.Count;
+
+        GetCards();
 
         return damage;
     }
 
     public bool CheckCards(List<Card> cardsToPlay)
     {
-        if (!hasOneCardOfType(CardType.COMBO_INIT)) return false;
+        if (!hasOneCardOfType(CardType.COMBO_INIT, cardsToPlay)) return false;
         else
         {
-            if (hasOneCardOfType(CardType.COMBO_FINISHER) && !hasMiddleCards()) return false;
+            if (hasOneCardOfType(CardType.COMBO_FINISHER, cardsToPlay) && !hasMiddleCards(cardsToPlay)) return false;
         }
 
         return true;
@@ -59,12 +64,12 @@ public class Fighter {
 
     public void CheckFighterState()
     {
-        if (!hasOneCardOfType(CardType.COMBO_INIT) && deck.Count == 0)
+        if (!hasOneCardOfType(CardType.COMBO_INIT, hand) && deck.Count == 0)
         {
             //TODO fighter looooooose
         }
         
-        else if (!hasOneCardOfType(CardType.COMBO_INIT) && deck.Count > 0)
+        else if (!hasOneCardOfType(CardType.COMBO_INIT, hand) && deck.Count > 0)
         {
             //TODO force guard (?)
         }
@@ -74,7 +79,7 @@ public class Fighter {
     {
         this.defensePoints = 1 / (2 + cardsToDiscard.Count);
         DiscardCards(cardsToDiscard);
-        getCards();
+        GetCards();
     }
 
     public void ApplyDamage(int damage)
@@ -85,11 +90,11 @@ public class Fighter {
     private void DiscardCards(List<Card> cardsToDiscard)
     {
         //TODO: Discard or queue to deck(?)
-        hand.RemoveAll(x => cardsToDiscard.Contains(x));
+        hand = hand.Except(cardsToDiscard).ToList();
         cardsHand = hand.Count;
     }
 
-    private void getCards()
+    private void GetCards()
     {
         while (cardsHand < maxCardHand && deck.Count > 0)
         {
@@ -101,25 +106,27 @@ public class Fighter {
         PrintHand();
     }
 
-    private bool hasOneCardOfType(CardType type)
+    private bool hasOneCardOfType(CardType type, List<Card> list)
     {
         int count = 0;
 
-        for (int i = 0; i < hand.Count; ++i)
+        for (int i = 0; i < list.Count; ++i)
         {
-            if (hand[i].type == type) count++;
+            if (list[i].type == type) count++;
 
             if (count > 1) return false;
         }
 
+        if (count == 0)
+            return false;
         return true;
     }
 
-    private bool hasMiddleCards()
+    private bool hasMiddleCards(List<Card> list)
     {
-        for (int i = 0; i < hand.Count; ++i)
+        for (int i = 0; i < list.Count; ++i)
         {
-            if (hand[i].type == CardType.COMBO_MIDDLE) return true;
+            if (list[i].type == CardType.COMBO_MIDDLE) return true;
         }
 
         return false;
