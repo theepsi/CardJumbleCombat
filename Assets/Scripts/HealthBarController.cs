@@ -22,16 +22,15 @@ public class HealthBarController : MonoBehaviour {
 
     IEnumerator ApplyDamageRed(float amount)
     {
-        float currentTime = 0;
-        do
+        float duration = 1f;
+        float increment = 0.01f;
+        float totalTime = 0f;
+
+        while (totalTime < duration)
         {
-            currentTime += Time.deltaTime / 10f;
-
-            healthSliderRed.fillAmount = 1 - currentTime;
-
-            yield return null;
-
-        } while (currentTime < amount);
+            totalTime += increment;
+            healthSliderRed.fillAmount -= amount / (duration / increment);
+            yield return new WaitForSeconds(increment);
+        }
     }
-
 }
