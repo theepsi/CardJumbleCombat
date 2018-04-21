@@ -43,6 +43,7 @@ public class Game : MonoBehaviour {
 
     private Fighter player;
     private Fighter enemy;
+    private PCFighter pcFighter;
 
     private int playerDamage;
     private int enemyDamage;
@@ -70,6 +71,7 @@ public class Game : MonoBehaviour {
         // prepare player and enemy (life, cards, etc)
         player = new Fighter();
         enemy = new Fighter();
+        pcFighter = new PCFighter(enemy);
         // change game state to preparation
         debugCards = new int[availableInitCards.Count + availableMiddleCards.Count + availableFinisherCards.Count];
         Stack<Card> deck = GenerateRandomDeck();
@@ -97,7 +99,7 @@ public class Game : MonoBehaviour {
 
                 DisplayPlayerHand(player.Hand);
 
-                //Enemy damage;
+                enemyDamage = pcFighter.SelectCombo();
 
                 ChangeState(GameState.DAMAGE_PHASE);
             }
