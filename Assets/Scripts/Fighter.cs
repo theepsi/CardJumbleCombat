@@ -40,11 +40,9 @@ public class Fighter {
             damage += cardsToPlay[i].damage;
         }
 
-        hand = hand.Except(cardsToPlay).ToList();
+        DiscardCards(cardsToPlay);
 
         currentGauge += damage;
-
-        cardsHand = hand.Count;
 
         GetCards();
 
@@ -77,7 +75,8 @@ public class Fighter {
 
     public void Guard(List<Card> cardsToDiscard)
     {
-        this.defensePoints = 1 / (2 + cardsToDiscard.Count);
+        defensePoints = 1f / (2 + cardsToDiscard.Count);
+        Debug.Log("Defense points updated to: " + defensePoints);
         DiscardCards(cardsToDiscard);
         GetCards();
     }

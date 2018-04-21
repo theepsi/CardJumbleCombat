@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public enum GameState
 {
@@ -20,10 +21,17 @@ public class Game : MonoBehaviour {
     public List<Card> availableMiddleCards;
     public List<Card> availableFinisherCards;
 
+    public CanvasGroup guardConfirmation;
+
     public int initProportions = 41;
     public int finisherProportions = 9;
 
     public int deckSize = 100;
+
+    public EventTrigger readyButton;
+    public EventTrigger guardButton;
+
+    public Text guardConfirmationText;
 
     private GameState currentState;
     private int[] debugCards;
@@ -63,10 +71,8 @@ public class Game : MonoBehaviour {
         ChangeState(GameState.PREPARATION_PHASE);
     }
 
-    public void ReadyButton()
-    {
-        List<Card> selectedCards = GetSelectedCards();
-        
+    public void ReadyButton(List<Card> selectedCards)
+    {        
         if (selectedCards.Count > 0)
         {
             if (player.CheckCards(selectedCards))
@@ -88,6 +94,55 @@ public class Game : MonoBehaviour {
         {
             Debug.Log("No cards Selected.");
         }
+    }
+
+    public void DoGuard()
+    {
+        List<Card> selectedCards = GetSelectedCards();
+
+        Debug.Log("GUARD YES");
+        //With Guard button you will use your selected cards as defense, so you will have some defense points and you wont attack this turn. The more you discard, the less you defend.
+        ToggleCardsAndActions(true);
+               
+        player.Guard(selectedCards);
+
+        DisplayPlayerHand(player.Hand);
+
+        //Enemy damage;
+
+        DismissGuard();
+
+        ChangeState(GameState.DAMAGE_PHASE);
+    }
+
+    public void GuardButton()
+    {
+        Debug.Log("GUARD");
+
+        ToggleCardsAndActions(false);
+
+        List<Card> selectedCards = GetSelectedCards();
+
+        if (selectedCards.Count > 0)
+        {
+            guardConfirmationText.text = (1f / (2 + selectedCards.Count) * 100).ToString("n2") + "% defense discarding " + selectedCards.Count + " cards. Continue?";
+        }
+        else
+        {
+            guardConfirmationText.text = "50% defense discarding 0 cards. Continue?";
+        }
+
+        guardConfirmation.gameObject.SetActive(true);
+        guardConfirmation.alpha = 1; //TODO: animation? if not, remove.
+
+    }
+
+    public void DismissGuard()
+    {
+        ToggleCardsAndActions(true);
+
+        guardConfirmation.gameObject.SetActive(false);
+        guardConfirmation.alpha = 0;
     }
 
     private void ChangeState(GameState state)
@@ -204,5 +259,17 @@ public class Game : MonoBehaviour {
         {
             cards[i].gameObject.SetActive(false);
         }
+    }
+
+    private void ToggleCardsAndActions(bool toggle)
+    {
+        EventTrigger[] cards = handReference.GetComponentsInChildren<EventTrigger>();
+        for (int i = 0; i < cards.Length; ++i)
+        {
+            cards[i].enabled = toggle;
+        }
+
+        readyButton.enabled = toggle;
+        guardButton.enabled = toggle;
     }
 }

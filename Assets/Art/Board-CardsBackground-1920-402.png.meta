@@ -69,8 +69,19 @@ TextureImporter:
   spriteSheet:
     serializedVersion: 2
     sprites: []
-    outline: []
-    physicsShape: []
+    outline:
+    - - {x: 958, y: 201}
+      - {x: -960, y: 201}
+      - {x: -960, y: -201}
+      - {x: 958, y: -201}
+      - {x: 958, y: -200}
+      - {x: 960, y: -199}
+      - {x: 960, y: 199}
+    physicsShape:
+    - - {x: -960, y: 201}
+      - {x: -960, y: -201}
+      - {x: 960, y: -201}
+      - {x: 960, y: 201}
   spritePackingTag: 
   userData: 
   assetBundleName: 
