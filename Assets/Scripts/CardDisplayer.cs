@@ -12,12 +12,10 @@ public class CardDisplayer : MonoBehaviour {
 
     public bool selected;
 
-    private Outline outline;
-
     public void InitCard (Card card)
     {
-        outline = GetComponent<Outline>();
-        outline.enabled = false;
+        selected = false;
+
         switch (card.type)
         {
             case CardType.COMBO_INIT:
@@ -52,12 +50,12 @@ public class CardDisplayer : MonoBehaviour {
         if (!selected)
         {
             transform.DOScale(new Vector3(1f, 1f, 1f), .5f);
-            outline.enabled = true;
+            transform.DOLocalMoveY(25f, .5f);
         }
         else
         {
             transform.DOScale(new Vector3(1.35f, 1.35f, 1f), .5f);
-            outline.enabled = false;
+            transform.DOLocalMoveY(0, .5f);
         }
 
         selected = !selected;

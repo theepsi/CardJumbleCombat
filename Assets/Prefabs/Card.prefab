@@ -58,7 +58,6 @@ GameObject:
   - component: {fileID: 114786937304728766}
   - component: {fileID: 114981385215634408}
   - component: {fileID: 114156638462415538}
-  - component: {fileID: 114303762223110518}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -130,20 +129,6 @@ MonoBehaviour:
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []
---- !u!114 &114303762223110518
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1485737636864694}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.24137926, g: 1, b: 0, a: 0.478}
-  m_EffectDistance: {x: 11.06, y: 7.74}
-  m_UseGraphicAlpha: 1
 --- !u!114 &114570079943733176
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -258,7 +243,7 @@ MonoBehaviour:
   cardCover: {fileID: 114786937304728766}
   artwork: {fileID: 114570079943733176}
   description: {fileID: 114705099316101870}
-  card: {fileID: 0}
+  color: {r: 1, g: 1, b: 1, a: 1}
   selected: 0
 --- !u!222 &222386834286650090
 CanvasRenderer:
