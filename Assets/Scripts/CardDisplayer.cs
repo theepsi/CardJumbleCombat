@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class CardDisplayer : MonoBehaviour {
 
@@ -11,8 +12,20 @@ public class CardDisplayer : MonoBehaviour {
 
     public Card card;
 
-	void InitCard ()
+    public bool selected;
+
+    private Outline outline;
+
+    //DELETE, ONLY FOR DEBUG
+    private void Awake()
     {
+        InitCard();
+    }
+
+    public void InitCard ()
+    {
+        outline = GetComponent<Outline>();
+        outline.enabled = false;
         switch (card.type)
         {
             case CardType.COMBO_INIT:
@@ -28,5 +41,33 @@ public class CardDisplayer : MonoBehaviour {
 
         artwork.sprite = card.artwork;
         description.text = card.description;
+    }
+
+    public void HoverCard()
+    {
+        if (!selected)
+            transform.DOScale(new Vector3(1.35f, 1.35f, 1f), .5f);
+    }
+
+    public void ExitCard()
+    {
+        if (!selected)
+            transform.DOScale(new Vector3(1f, 1f, 1f), .5f);
+    }
+
+    public void OnClick()
+    {
+        if (!selected)
+        {
+            transform.DOScale(new Vector3(1f, 1f, 1f), .5f);
+            outline.enabled = true;
+        }
+        else
+        {
+            transform.DOScale(new Vector3(1.35f, 1.35f, 1f), .5f);
+            outline.enabled = false;
+        }
+
+        selected = !selected;
     }
 }

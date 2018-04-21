@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c42d99973de984b837463579d28703, type: 3}
   m_Name: Finisher3
   m_EditorClassIdentifier: 
-  artwork: {fileID: 0}
+  artwork: {fileID: 21300000, guid: 50dfeedcca135f54a8bcaf24bdbf8b47, type: 3}
   description: BUAHH
   damage: 15
   type: 2

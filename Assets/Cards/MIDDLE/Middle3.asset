@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c42d99973de984b837463579d28703, type: 3}
   m_Name: Middle3
   m_EditorClassIdentifier: 
-  artwork: {fileID: 0}
+  artwork: {fileID: 21300000, guid: 778d3f8e0c3e5fd429afb90e602ea3f8, type: 3}
   description: "middle de 3 da\xF1o"
   damage: 3
   type: 1

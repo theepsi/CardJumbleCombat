@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c42d99973de984b837463579d28703, type: 3}
   m_Name: Init3
   m_EditorClassIdentifier: 
-  artwork: {fileID: 0}
+  artwork: {fileID: 21300000, guid: 65b5cb83292e22f4eb7ab49936b4b86e, type: 3}
   description: "init 3 de da\xF1o"
   damage: 3
   type: 0
