@@ -13,6 +13,11 @@ public enum GameState
 
 public class Game : MonoBehaviour {
 
+    public static Game Instance;
+
+    public HealthBarController playerHealthController;
+    public HealthBarController enemyHealthController;
+
     public EventSystem eventSystem;
 
     public Transform handReference;
@@ -41,6 +46,15 @@ public class Game : MonoBehaviour {
 
     private int playerDamage;
     private int enemyDamage;
+
+    private void Awake()
+    {
+        // Singleton
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
+            Destroy(this);
+    }
 
     //DELETE
     private void Start()
@@ -71,8 +85,10 @@ public class Game : MonoBehaviour {
         ChangeState(GameState.PREPARATION_PHASE);
     }
 
-    public void ReadyButton(List<Card> selectedCards)
-    {        
+    public void ReadyButton()
+    {
+        List<Card> selectedCards = GetSelectedCards();
+
         if (selectedCards.Count > 0)
         {
             if (player.CheckCards(selectedCards))
@@ -162,6 +178,9 @@ public class Game : MonoBehaviour {
                 Debug.Log("Player did " + playerDamage + " to Enemy");
                 enemy.ApplyDamage(playerDamage);
                 player.ApplyDamage(enemyDamage);
+
+                enemyHealthController.ApplyDamage(playerDamage);
+                playerHealthController.ApplyDamage(enemyDamage);
 
                 playerDamage = 0;
                 enemyDamage = 0;
@@ -257,6 +276,7 @@ public class Game : MonoBehaviour {
         CardDisplayer[] cards = handReference.GetComponentsInChildren<CardDisplayer>();
         for (int i = 0; i < cards.Length; ++i)
         {
+            cards[i].selected = false;
             cards[i].gameObject.SetActive(false);
         }
     }
