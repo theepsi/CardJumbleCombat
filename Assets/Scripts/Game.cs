@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
+using System;
 
 public enum GameState
 {
@@ -105,6 +107,8 @@ public class Game : MonoBehaviour {
 
         DisplayPlayerHand(player.Hand);
 
+        StartCoroutine(AnimateNewCards(player.Hand));
+
         DisplayDeck(playerDeck);
 
         ChangeState(GameState.PREPARATION_PHASE);
@@ -122,7 +126,11 @@ public class Game : MonoBehaviour {
 
                 RemoveFromDisplayDeck(selectedCards.Count);
 
+                HideNewCards(selectedCards.ToArray());
+
                 DisplayPlayerHand(player.Hand);
+
+                StartCoroutine(AnimateNewCards(selectedCards.ToArray()));
 
                 enemyDamage = pcFighter.Play();
 
@@ -153,7 +161,11 @@ public class Game : MonoBehaviour {
 
         RemoveFromDisplayDeck(selectedCards.Count);
 
+        HideNewCards(selectedCards.ToArray());
+
         DisplayPlayerHand(player.Hand);
+
+        StartCoroutine(AnimateNewCards(selectedCards.ToArray()));
 
         enemyDamage = pcFighter.Play();
 
@@ -188,6 +200,35 @@ public class Game : MonoBehaviour {
 
         guardConfirmation.gameObject.SetActive(false);
         guardConfirmation.alpha = 0;
+    }
+
+    private void HideNewCards(CardMap[] selectedCards)
+    {
+        for (int i = 0; i < selectedCards.Length; ++i)
+        {
+            Transform newCard = handReference.GetChild(selectedCards[i].index);
+            newCard.GetComponent<CardDisplayer>().FlipCard(true);
+        }
+    }
+
+    private IEnumerator AnimateNewCards(CardMap[] selectedCards)
+    {
+        ToggleCardsAndActions(false);
+
+        for (int i = 0; i < selectedCards.Length; ++i)
+        {
+            Transform newCard = handReference.GetChild(selectedCards[i].index);
+
+            newCard.DOScale(1.2f, .2f);
+
+            yield return new WaitForSeconds(0.2f);
+
+            newCard.GetComponent<CardDisplayer>().FlipCard(false);
+
+            newCard.DOScale(1f, .2f);
+        }
+
+        ToggleCardsAndActions(true);
     }
 
     private void ChangeState(GameState state)
@@ -293,21 +334,21 @@ public class Game : MonoBehaviour {
         int totalInitCards = initProportions * deckSize / 100;
         for (int i = 0; i < totalInitCards; ++i)
         {
-            int randomCard = Random.Range(0, availableInitCards.Count);
+            int randomCard = UnityEngine.Random.Range(0, availableInitCards.Count);
             deck.Push(availableInitCards[randomCard]);
         }
 
         int totalFinisherstCards = finisherProportions * deckSize / 100;
         for (int i = 0; i < totalFinisherstCards; ++i)
         {
-            int randomCard = Random.Range(0, availableFinisherCards.Count);
+            int randomCard = UnityEngine.Random.Range(0, availableFinisherCards.Count);
             deck.Push(availableFinisherCards[randomCard]);
         }
 
         int totalMiddleCards = deckSize - (totalInitCards + totalFinisherstCards);
         for (int i = 0; i < totalMiddleCards; ++i)
         {
-            int randomCard = Random.Range(0, availableMiddleCards.Count);
+            int randomCard = UnityEngine.Random.Range(0, availableMiddleCards.Count);
             deck.Push(availableMiddleCards[randomCard]);
         }
 
@@ -372,7 +413,11 @@ public class Game : MonoBehaviour {
     {
         for (int i = 0; i < amount; ++i)
         {
-            Destroy(deckReference.GetChild(deckReference.childCount - i - 1).gameObject); // -1 because there ir a transparent card
+            Transform lastDeckCard = deckReference.GetChild(deckReference.childCount - i - 1); // -1 because there ir a transparent card
+            lastDeckCard.DOLocalMoveY(-500f, .5f).OnComplete(() =>
+            {
+                Destroy(lastDeckCard.gameObject);
+            });
         }
     }
 }

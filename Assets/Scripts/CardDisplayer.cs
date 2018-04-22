@@ -9,6 +9,8 @@ public class CardDisplayer : MonoBehaviour {
     public Text description;
     public CardMap cardMap;
 
+    public Image flipped;
+
     public bool selected;
 
     public void InitCard (CardMap cardMap)
@@ -64,5 +66,10 @@ public class CardDisplayer : MonoBehaviour {
         }
 
         selected = !selected;
+    }
+
+    public void FlipCard(bool flip)
+    {
+        flipped.enabled = flip;
     }
 }
