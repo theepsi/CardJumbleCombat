@@ -22,6 +22,9 @@ public class Game : MonoBehaviour {
     public CombatTextController playerCombatTextController;
     public CombatTextController enemyCombatTextController;
 
+    public HealthTextController playerHealthTextController;
+    public HealthTextController enemyHealthTextController;
+
     public EventSystem eventSystem;
 
     public Transform handReference;
@@ -93,6 +96,9 @@ public class Game : MonoBehaviour {
 
         player.Init(Shuffle(playerDeck), "Player");
         enemy.Init(Shuffle(enemyDeck), "Computer");
+
+        playerHealthTextController.ShowText(player.Health.ToString());
+        enemyHealthTextController.ShowText(enemy.Health.ToString());
 
         DisplayPlayerHand(player.Hand);
 
@@ -195,6 +201,7 @@ public class Game : MonoBehaviour {
                 //Fancy animations and apply damage to both players and also health bars
                 Debug.Log("[DAMAGE] Player did " + playerDamage + " to Computer");
                 enemyHealthController.PrintDamage(enemy.ApplyDamage(playerDamage));
+                enemyHealthTextController.ShowText(enemy.Health.ToString());
                 string enemyText = playerDamage + "";
                 if (enemy.DefensePoints != 1)
                     enemyText += "\nBLOCKED (" + (enemy.DefensePoints * 100).ToString("n2") + "%)";
@@ -205,6 +212,7 @@ public class Game : MonoBehaviour {
 
                 Debug.Log("[DAMAGE] Computer did " + enemyDamage + " to Player");
                 playerHealthController.PrintDamage(player.ApplyDamage(enemyDamage));
+                playerHealthTextController.ShowText(player.Health.ToString());
                 string playerText = enemyDamage + "";
                 if (player.DefensePoints != 1)
                     playerText += "\nBLOCKED (" + (player.DefensePoints * 100).ToString("n2") + "%)";

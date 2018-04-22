@@ -22,6 +22,9 @@ public class Fighter {
 
     public CardMap[] Hand { get { return hand; } }
 
+    public int Health { get { return currentHealth; } }
+    public int Gauge { get { return currentGauge; } }
+
     public float DefensePoints { get { return defensePoints; } }
 
     public Sprite artWork;
@@ -42,6 +45,7 @@ public class Fighter {
     {
         this.deck = deck;
         this.name = name;
+
         hand = new CardMap[maxCardHand];
 
         for (int i = 0; i < hand.Length; ++i)
@@ -121,6 +125,7 @@ public class Fighter {
         int recivedDamage = Mathf.RoundToInt(damage * defensePoints);
         currentHealth -= recivedDamage;
         Debug.Log("[DAMAGE] " + name + " recived " + recivedDamage);
+
         return recivedDamage;
     }
 
