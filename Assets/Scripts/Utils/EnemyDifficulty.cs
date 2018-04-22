@@ -6,9 +6,9 @@ public static class EnemyDifficulty {
 
     private static int aIDifficulty;
 
-    public static int AIDiffficulty
+    public static int AIDifficulty
     {
-        get { return AIDiffficulty; }
+        get { return aIDifficulty; }
 
         set { aIDifficulty = value; }
     }

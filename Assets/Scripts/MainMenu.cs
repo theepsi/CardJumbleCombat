@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour {
     public void StartGame()
     {
         ToggleButtons(false);
-        EnemyDifficulty.AIDiffficulty = (int) difficultSelection.value;
+        EnemyDifficulty.AIDifficulty = (int) difficultSelection.value;
         Fader.Instance.FadeOut(() => SceneManager.LoadScene("MainGame"));
     }
 

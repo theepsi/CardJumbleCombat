@@ -5,7 +5,7 @@ public class PCFighter {
 
     private Fighter fighter;
 
-    private int aiDifficulty = 2;
+    private int aiDifficulty = 1;
 
     public PCFighter (Fighter fighter)
     {
@@ -14,15 +14,15 @@ public class PCFighter {
 
     public int Play()
     {
+        aiDifficulty = EnemyDifficulty.AIDifficulty;
+
         List<List<CardMap>> possibleCombinations = GenerateAllCombinations();
 
         if (possibleCombinations.Count == 0)
         {
             // TODO: Play guard and decide which ones does he change
-            List<CardMap> discardCards = GetCardToDiscard();
             Debug.Log("[GUARD] Computer - GUARD YES");
-
-            fighter.Guard(discardCards);
+            fighter.Guard(GetCardToDiscard());
             return 0;
 
         } else
@@ -35,18 +35,17 @@ public class PCFighter {
     {
         List<CardMap> selectedCombination = new List<CardMap>();
 
-        if (aiDifficulty == 1)
+        if (aiDifficulty == 0)
         {
             // IA is stupid
-            int randomCombo = Random.Range(0, possibleCombinations.Count);
-            return possibleCombinations[randomCombo];
+            return GetBadCombo(possibleCombinations);
         }
-        else if (aiDifficulty == 2)
+        else if (aiDifficulty == 1)
         {
             // IA is random
             int randomCombo = Random.Range(0, possibleCombinations.Count);
             return possibleCombinations[randomCombo];
-        } else if (aiDifficulty == 3)
+        } else if (aiDifficulty == 2)
         {
             // IA is a genious
             return GetBestCombo(possibleCombinations);
@@ -71,7 +70,7 @@ public class PCFighter {
 
             if (damage < threshold)
             {
-                worstCombos.Add(possibleCombinations[i][j]);
+                worstCombos.Add(possibleCombinations[i]);
             }
         }
 
@@ -96,7 +95,7 @@ public class PCFighter {
             if (damage > highestValue)
             {
                 highestValue = damage;
-                bestCombo = possibleCombinations[i][j];
+                bestCombo = possibleCombinations[i];
             }
         }
 
@@ -107,7 +106,7 @@ public class PCFighter {
     {
         List<CardMap> discardCards = new List<CardMap>();
 
-        if (aiDifficulty == 1 || aiDifficulty == 2)
+        if (aiDifficulty == 0 || aiDifficulty == 1)
         {
             List<int> visitedCards = new List<int>();
             int randomDiscard = Random.Range(1, fighter.Hand.Length);
@@ -121,7 +120,7 @@ public class PCFighter {
                 discardCards.Add(fighter.Hand[randomCard]);
             }
         }
-        else if (aiDifficulty == 3)
+        else if (aiDifficulty == 2)
         {
             // IA is a genious
             int threshold = 4;
