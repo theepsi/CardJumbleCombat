@@ -382,7 +382,7 @@ public class Game : MonoBehaviour {
         }
     }
 
-    private void ToggleCardsAndActions(bool toggle)
+    public void ToggleCardsAndActions(bool toggle)
     {
         EventTrigger[] cards = handReference.GetComponentsInChildren<EventTrigger>();
         for (int i = 0; i < cards.Length; ++i)
