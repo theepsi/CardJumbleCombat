@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -83,7 +84,7 @@ public class Game : MonoBehaviour {
     //DELETE
     private void Start()
     {
-        InitGame();
+        Fader.Instance.FadeIn(() => InitGame());
     }
 
     public void InitGame()
@@ -327,29 +328,24 @@ public class Game : MonoBehaviour {
                 StopAllCoroutines();
                 ToggleCardsAndActions(false);
                 Debug.Log("[GAMESTATE] KO phase");
-                GameOver();
+                FinalState("Game Over");
                 break;
             case GameState.WIN_PHASE:
                 StopAllCoroutines();
                 ToggleCardsAndActions(false);
                 Debug.Log("[GAMESTATE] WIN phase");
-                PlayerWins();
+                FinalState("You WIN");
                 break;
         }
 
         currentState = state;
     }
 
-    private void GameOver()
+    private void FinalState(String text)
     {
         finalState.GetComponentInChildren<Text>(true).text = "Game Over";
         finalState.gameObject.SetActive(true);
-    }
-
-    private void PlayerWins()
-    {
-        finalState.GetComponentInChildren<Text>(true).text = "You WIN";
-        finalState.gameObject.SetActive(true);
+        StartCoroutine(BackToMainMenu());
     }
 
     private void DisplayPlayerHand(CardMap[] hand)
@@ -477,5 +473,12 @@ public class Game : MonoBehaviour {
     public void ButtonExit(Transform data)
     {
         data.DOScale(new Vector3(1f, 1f, 1f), .5f);
+    }
+
+    private IEnumerator BackToMainMenu()
+    {
+        yield return new WaitForSeconds(3f);
+
+        Fader.Instance.FadeOut(() => SceneManager.LoadScene("MainMenu"));
     }
 }

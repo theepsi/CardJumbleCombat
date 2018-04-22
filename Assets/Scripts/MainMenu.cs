@@ -11,9 +11,15 @@ public class MainMenu : MonoBehaviour {
 
     public Transform confirmationDialog;
 
+    public void Start()
+    {
+        ToggleButtons(false);
+        Fader.Instance.FadeIn(() => ToggleButtons(true));
+    }
+
     public void StartGame()
     {
-        SceneManager.LoadScene("MainGame");
+        Fader.Instance.FadeOut(() => SceneManager.LoadScene("MainGame"));
     }
 
     public void ShowCredits()
@@ -58,7 +64,7 @@ public class MainMenu : MonoBehaviour {
 
     public void ConfirmationYes()
     {
-        Application.Quit();
+        Fader.Instance.FadeOut(() => Application.Quit());
     }
 
     public void ConfirmationNo()
