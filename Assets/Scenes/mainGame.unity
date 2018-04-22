@@ -2496,6 +2496,7 @@ MonoBehaviour:
   readyButton: {fileID: 1933303072}
   guardButton: {fileID: 387040366}
   guardConfirmationText: {fileID: 1389145631}
+  deckReference: {fileID: 85679214}
 --- !u!4 &2005932980
 Transform:
   m_ObjectHideFlags: 0
@@ -2525,6 +2526,10 @@ MonoBehaviour:
       type: 2}
     Pool: []
     PooledAmount: 5
+  - PooledObject: {fileID: 1995483371696618, guid: eb421065b46873f4985ed270879aa3a8,
+      type: 2}
+    Pool: []
+    PooledAmount: 100
 --- !u!1 &2019107177
 GameObject:
   m_ObjectHideFlags: 0

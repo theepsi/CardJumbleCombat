@@ -38,6 +38,8 @@ public class Game : MonoBehaviour {
 
     public Text guardConfirmationText;
 
+    public Transform deckReference;
+
     private GameState currentState;
     private int[] debugCards;
 
@@ -47,6 +49,8 @@ public class Game : MonoBehaviour {
 
     private int playerDamage;
     private int enemyDamage;
+
+    private Stack<Card> playerDeck;
 
     private void Awake()
     {
@@ -75,15 +79,17 @@ public class Game : MonoBehaviour {
 
         // change game state to preparation
         debugCards = new int[availableInitCards.Count + availableMiddleCards.Count + availableFinisherCards.Count];
-        Stack<Card> deck = GenerateRandomDeck();
-        Stack<Card> enemy_deck = GenerateRandomDeck();
+        playerDeck = GenerateRandomDeck();
+        Stack<Card> enemyDeck = GenerateRandomDeck();
 
-        player.Init(Shuffle(deck));
-        enemy.Init(Shuffle(enemy_deck));
+        player.Init(Shuffle(playerDeck));
+        enemy.Init(Shuffle(enemyDeck));
 
         DisplayPlayerHand(player.Hand);
 
         //PrintRandomDeck();
+
+        DisplayDeck(playerDeck);
 
         ChangeState(GameState.PREPARATION_PHASE);
     }
@@ -97,6 +103,8 @@ public class Game : MonoBehaviour {
             if (player.CheckCards(selectedCards))
             {
                 playerDamage = player.PlayCards(selectedCards);
+
+                RemoveFromDisplayDeck(selectedCards.Count);
 
                 DisplayPlayerHand(player.Hand);
 
@@ -124,6 +132,8 @@ public class Game : MonoBehaviour {
         ToggleCardsAndActions(true);
                
         player.Guard(selectedCards);
+
+        RemoveFromDisplayDeck(selectedCards.Count);
 
         DisplayPlayerHand(player.Hand);
 
@@ -213,7 +223,7 @@ public class Game : MonoBehaviour {
         {
             GameObject card = ObjectPooler.Instance.GetPooledObject("Card");
 
-            card.transform.SetParent(handReference);
+            card.transform.SetParent(handReference, false);
             card.GetComponent<CardDisplayer>().InitCard(hand[i]);
             card.SetActive(true);
         }
@@ -295,5 +305,28 @@ public class Game : MonoBehaviour {
 
         readyButton.enabled = toggle;
         guardButton.enabled = toggle;
+    }
+
+    private void DisplayDeck(Stack<Card> deck)
+    {
+        for (int i = 0; i < deck.Count; ++i)
+        {
+            GameObject cardBack = ObjectPooler.Instance.GetPooledObject("DummyCard");
+            cardBack.transform.SetParent(deckReference, false);
+            Vector3 save = cardBack.transform.position;
+            Vector3 offset = new Vector3(save.x + 0.25f * i, save.y + 0.25f * i, save.z);
+            cardBack.transform.position = offset;
+
+            cardBack.SetActive(true);
+        }
+        
+    }
+
+    private void RemoveFromDisplayDeck(int amount)
+    {
+        for (int i = 0; i < amount; ++i)
+        {
+            Destroy(deckReference.GetChild(deckReference.childCount - i - 1).gameObject); // -1 because there ir a transparent card
+        }
     }
 }
