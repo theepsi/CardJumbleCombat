@@ -22,6 +22,8 @@ public class Fighter {
 
     public CardMap[] Hand { get { return hand; } }
 
+    public float DefensePoints { get { return defensePoints; } }
+
     public Sprite artWork;
 
     public bool IsPrepared { get; set; }
