@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public struct CardMap
 {
@@ -19,6 +18,8 @@ public class Fighter {
     public int maxHealth = 150;
     public int maxGauge = 50;
 
+    public string name = "";
+
     public CardMap[] Hand { get { return hand; } }
 
     public Sprite artWork;
@@ -35,9 +36,10 @@ public class Fighter {
 
     private float defensePoints = 1;
 
-    public void Init(Stack<Card> deck)
+    public void Init(Stack<Card> deck, string name)
     {
         this.deck = deck;
+        this.name = name;
         hand = new CardMap[maxCardHand];
 
         for (int i = 0; i < hand.Length; ++i)
@@ -45,13 +47,16 @@ public class Fighter {
             hand[i] = new CardMap(i, null);
         }
 
+        currentHealth = maxHealth;
+        currentGauge = 0;
+
         GetCards();
     }
 
     public int PlayCards(List<CardMap> cardsToPlay)
     {
         int damage = 0;
-        defensePoints = 1;
+        defensePoints = 1f;
 
         for (int i = 0; i < cardsToPlay.Count; ++i)
         {
@@ -78,36 +83,45 @@ public class Fighter {
         return true;
     }
 
-    public void CheckFighterState()
+    public GameState CheckFighterState()
     {
-        if (!hasOneCardOfType(CardType.COMBO_INIT, hand) && deck.Count == 0)
+        if (currentHealth <= 0)
         {
-            //TODO fighter looooooose
+            Debug.Log("[END] Fighter has lost: " + name);
+            return GameState.KO_PHASE;
+        }
+
+        else if (!hasOneCardOfType(CardType.COMBO_INIT, hand) && deck.Count == 0)
+        {
+            Debug.Log("[END] Fighter has lost: " + name);
+            return GameState.KO_PHASE;
         }
         
         else if (!hasOneCardOfType(CardType.COMBO_INIT, hand) && deck.Count > 0)
         {
             //TODO force guard (?)
         }
+        return GameState.PREPARATION_PHASE;
     }
 
     public void Guard(List<CardMap> cardsToDiscard)
     {
         defensePoints = 1f / (2 + cardsToDiscard.Count);
-        Debug.Log("Defense points updated to: " + defensePoints);
+        Debug.Log("[DEFENSE] Defense points updated to: " + defensePoints);
         DiscardCards(cardsToDiscard);
         GetCards();
     }
 
-    public void ApplyDamage(int damage)
+    public int ApplyDamage(int damage)
     {
-        currentHealth -= Mathf.RoundToInt(damage * defensePoints);
+        int recivedDamage = Mathf.RoundToInt(damage * defensePoints);
+        currentHealth -= recivedDamage;
+        Debug.Log("[DAMAGE] " + name + " recived " + recivedDamage);
+        return recivedDamage;
     }
 
     private void DiscardCards(List<CardMap> cardsToDiscard)
     {
-        //TODO: Discard or queue to deck(?)
-        //hand = hand.Except(cardsToDiscard).ToList();
         for (int i = 0; i < cardsToDiscard.Count; ++i)
         {
             hand[cardsToDiscard[i].index].card = null;
@@ -135,9 +149,6 @@ public class Fighter {
             index++;
             cardsHand++;
         }
-
-        Debug.Log("Just draw cards, remaining cards: " + deck.Count);
-        PrintHand();
     }
 
     private bool hasOneCardOfType(CardType type, CardMap[] list)

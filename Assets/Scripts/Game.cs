@@ -41,7 +41,6 @@ public class Game : MonoBehaviour {
     public Transform deckReference;
 
     private GameState currentState;
-    private int[] debugCards;
 
     private Fighter player;
     private Fighter enemy;
@@ -78,7 +77,6 @@ public class Game : MonoBehaviour {
         pcFighter = new PCFighter(enemy);
 
         // change game state to preparation
-        debugCards = new int[availableInitCards.Count + availableMiddleCards.Count + availableFinisherCards.Count];
         playerDeck = GenerateRandomDeck();
         Stack<Card> enemyDeck = GenerateRandomDeck();
 
@@ -86,8 +84,6 @@ public class Game : MonoBehaviour {
         enemy.Init(Shuffle(enemyDeck));
 
         DisplayPlayerHand(player.Hand);
-
-        //PrintRandomDeck();
 
         DisplayDeck(playerDeck);
 
@@ -108,18 +104,18 @@ public class Game : MonoBehaviour {
 
                 DisplayPlayerHand(player.Hand);
 
-                enemyDamage = pcFighter.SelectCombo();
+                enemyDamage = pcFighter.Play();
 
                 ChangeState(GameState.DAMAGE_PHASE);
             }
             else
             {
-                Debug.Log("Wrong card combination.");
+                Debug.Log("[ERROR] Wrong card combination.");
             }
         }
         else
         {
-            Debug.Log("No cards Selected.");
+            Debug.Log("[ERROR] No cards Selected.");
         }
     }
 
@@ -127,7 +123,7 @@ public class Game : MonoBehaviour {
     {
         List<CardMap> selectedCards = GetSelectedCards();
 
-        Debug.Log("GUARD YES");
+        Debug.Log("[GUARD] Player - GUARD YES");
         //With Guard button you will use your selected cards as defense, so you will have some defense points and you wont attack this turn. The more you discard, the less you defend.
         ToggleCardsAndActions(true);
                
@@ -137,8 +133,7 @@ public class Game : MonoBehaviour {
 
         DisplayPlayerHand(player.Hand);
 
-        //TOOD: AI attacking
-        enemyDamage = pcFighter.SelectCombo();
+        enemyDamage = pcFighter.Play();
 
         DismissGuard();
 
@@ -147,8 +142,6 @@ public class Game : MonoBehaviour {
 
     public void GuardButton()
     {
-        Debug.Log("GUARD");
-
         ToggleCardsAndActions(false);
 
         List<CardMap> selectedCards = GetSelectedCards();
@@ -182,37 +175,40 @@ public class Game : MonoBehaviour {
         {
             case GameState.PREPARATION_PHASE:
                 eventSystem.enabled = true;
-                Debug.Log("Preparation phase");
+                Debug.Log("[GAMESTATE] Preparation phase");
                 break;
             case GameState.DAMAGE_PHASE:
                 eventSystem.enabled = false;
-                Debug.Log("Damage phase");
+                Debug.Log("[GAMESTATE] Damage phase");
 
                 //Fancy animations and apply damage to both players and also health bars
-                Debug.Log("Player did " + playerDamage + " to Enemy");
-                enemy.ApplyDamage(playerDamage);
-                player.ApplyDamage(enemyDamage);
+                Debug.Log("[DAMAGE] Player did " + playerDamage + " to Computer");
+                enemyHealthController.PrintDamage(enemy.ApplyDamage(playerDamage));
+                state = enemy.CheckFighterState();
 
-                enemyHealthController.ApplyDamage(playerDamage);
-                playerHealthController.ApplyDamage(enemyDamage);
+                if (state == GameState.KO_PHASE) break;
+
+                Debug.Log("[DAMAGE] Computer did " + enemyDamage + " to Player");
+                playerHealthController.PrintDamage(player.ApplyDamage(enemyDamage));
+                state = player.CheckFighterState();
+
+                if (state == GameState.KO_PHASE) break;
 
                 playerDamage = 0;
                 enemyDamage = 0;
 
                 //Check if someone dies or cant play and move to KO_PHASE if not, Preparation again.
 
-                ChangeState(GameState.PREPARATION_PHASE);
+                ChangeState(state);
 
                 break;
             case GameState.KO_PHASE:
                 eventSystem.enabled = false;
-                Debug.Log("KO phase");
+                Debug.Log("[GAMESTATE] KO phase");
                 break;
         }
 
         currentState = state;
-
-        Debug.Log("ChangeState to " + currentState.ToString());
     }
 
     private void DisplayPlayerHand(CardMap[] hand)
@@ -237,7 +233,6 @@ public class Game : MonoBehaviour {
         for (int i = 0; i < totalInitCards; ++i)
         {
             int randomCard = Random.Range(0, availableInitCards.Count);
-            debugCards[randomCard]++;
             deck.Push(availableInitCards[randomCard]);
         }
 
@@ -245,7 +240,6 @@ public class Game : MonoBehaviour {
         for (int i = 0; i < totalFinisherstCards; ++i)
         {
             int randomCard = Random.Range(0, availableFinisherCards.Count);
-            debugCards[randomCard + availableInitCards.Count + availableMiddleCards.Count]++;
             deck.Push(availableFinisherCards[randomCard]);
         }
 
@@ -253,7 +247,6 @@ public class Game : MonoBehaviour {
         for (int i = 0; i < totalMiddleCards; ++i)
         {
             int randomCard = Random.Range(0, availableMiddleCards.Count);
-            debugCards[randomCard + availableInitCards.Count]++;
             deck.Push(availableMiddleCards[randomCard]);
         }
 
@@ -275,14 +268,6 @@ public class Game : MonoBehaviour {
     {
         System.Random rnd = new System.Random();
         return new Stack<Card>(stack.OrderBy(x => rnd.Next()));
-    }
-
-    private void PrintRandomDeck()
-    {
-        for (int i = 0; i < debugCards.Length; ++i)
-        {
-            Debug.Log("card-" + (i + 1) + ": " + debugCards[i]);
-        }
     }
 
     private void CleanHand()
