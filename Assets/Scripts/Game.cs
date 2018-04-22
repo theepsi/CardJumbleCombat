@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -34,6 +35,7 @@ public class Game : MonoBehaviour {
     public List<Card> availableFinisherCards;
 
     public CanvasGroup guardConfirmation;
+    public CanvasGroup invalidPlay;
     public CanvasGroup finalState;
 
     public int initProportions = 36;
@@ -45,6 +47,7 @@ public class Game : MonoBehaviour {
     public EventTrigger guardButton;
 
     public Text guardConfirmationText;
+    public Text invalidPlayText;
 
     public Transform deckReference;
 
@@ -127,11 +130,13 @@ public class Game : MonoBehaviour {
             }
             else
             {
+                StartCoroutine(ShowInvalidPlayDialog("Wrong card combination."));
                 Debug.Log("[ERROR] Wrong card combination.");
             }
         }
         else
         {
+            StartCoroutine(ShowInvalidPlayDialog("No cards Selected."));
             Debug.Log("[ERROR] No cards Selected.");
         }
     }
@@ -246,13 +251,13 @@ public class Game : MonoBehaviour {
         currentState = state;
     }
 
-    public void GameOver()
+    private void GameOver()
     {
         finalState.GetComponentInChildren<Text>(true).text = "Game Over";
         finalState.gameObject.SetActive(true);
     }
 
-    public void PlayerWins()
+    private void PlayerWins()
     {
         finalState.GetComponentInChildren<Text>(true).text = "You WIN";
         finalState.gameObject.SetActive(true);
@@ -270,6 +275,15 @@ public class Game : MonoBehaviour {
             card.GetComponent<CardDisplayer>().InitCard(hand[i]);
             card.SetActive(true);
         }
+    }
+
+    private IEnumerator ShowInvalidPlayDialog(string text)
+    {
+        invalidPlayText.text = text;
+        invalidPlay.gameObject.SetActive(true);
+        invalidPlay.alpha = 1; //TODO: animation? if not, remove.
+        yield return new WaitForSeconds(1.5f);
+        invalidPlay.alpha = 0;
     }
 
     private Stack<Card> GenerateRandomDeck()
