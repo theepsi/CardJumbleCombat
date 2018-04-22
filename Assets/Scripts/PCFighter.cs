@@ -5,6 +5,8 @@ public class PCFighter {
 
     private Fighter fighter;
 
+    private int aiDifficulty = 1;
+
     public PCFighter (Fighter fighter)
     {
         this.fighter = fighter;
@@ -12,37 +14,140 @@ public class PCFighter {
 
     public int Play()
     {
+        aiDifficulty = EnemyDifficulty.AIDifficulty;
+
         List<List<CardMap>> possibleCombinations = GenerateAllCombinations();
 
         if (possibleCombinations.Count == 0)
         {
             // TODO: Play guard and decide which ones does he change
-            List<CardMap> discardCards = GetCardToDiscard();
             Debug.Log("[GUARD] Computer - GUARD YES");
-
-            fighter.Guard(discardCards);
+            fighter.Guard(GetCardToDiscard());
             return 0;
 
         } else
         {
-            int randomCombo = Random.Range(0, possibleCombinations.Count);
-            return fighter.PlayCards(possibleCombinations[randomCombo]);
+            return fighter.PlayCards(SelectCombination(possibleCombinations));
         }
+    }
+
+    private List<CardMap> SelectCombination(List<List<CardMap>> possibleCombinations)
+    {
+        List<CardMap> selectedCombination = new List<CardMap>();
+
+        if (aiDifficulty == 0)
+        {
+            // IA is stupid
+            return GetBadCombo(possibleCombinations);
+        }
+        else if (aiDifficulty == 1)
+        {
+            // IA is random
+            int randomCombo = Random.Range(0, possibleCombinations.Count);
+            return possibleCombinations[randomCombo];
+        } else if (aiDifficulty == 2)
+        {
+            // IA is a genious
+            return GetBestCombo(possibleCombinations);
+        }
+
+        return selectedCombination;
+    }
+
+    private List<CardMap> GetBadCombo(List<List<CardMap>> possibleCombinations)
+    {
+        int threshold = 20;
+        List<List<CardMap>> worstCombos = new List<List<CardMap>>();
+
+        for (int i = 0; i < possibleCombinations.Count; ++i)
+        {
+            int damage = 0;
+
+            for (int j = 0; j < possibleCombinations[i].Count; ++j)
+            {
+                damage += possibleCombinations[i][j].card.damage;
+            }
+
+            if (damage < threshold)
+            {
+                worstCombos.Add(possibleCombinations[i]);
+            }
+        }
+
+        int randomCombo = Random.Range(0, worstCombos.Count);
+        return worstCombos[randomCombo];
+    }
+
+    private List<CardMap> GetBestCombo(List<List<CardMap>> possibleCombinations)
+    {
+        int highestValue = 0;
+        List<CardMap> bestCombo = new List<CardMap>();
+
+        for (int i = 0; i < possibleCombinations.Count; ++i)
+        {
+            int damage = 0;
+
+            for (int j = 0; j < possibleCombinations[i].Count; ++j)
+            {
+                damage += possibleCombinations[i][j].card.damage;
+            }
+
+            if (damage > highestValue)
+            {
+                highestValue = damage;
+                bestCombo = possibleCombinations[i];
+            }
+        }
+
+        return bestCombo;
     }
 
     private List<CardMap> GetCardToDiscard()
     {
         List<CardMap> discardCards = new List<CardMap>();
-        List<int> visitedCards = new List<int>();
-        int randomDiscard = Random.Range(1, fighter.Hand.Length);
-        int randomCard = Random.Range(0, fighter.Hand.Length);
 
-        for (int i = 0; i < randomDiscard; ++i)
+        if (aiDifficulty == 0 || aiDifficulty == 1)
         {
-            while (visitedCards.Contains(randomCard))
-                randomCard = Random.Range(0, fighter.Hand.Length);
-            visitedCards.Add(randomCard);
-            discardCards.Add(fighter.Hand[randomCard]);
+            List<int> visitedCards = new List<int>();
+            int randomDiscard = Random.Range(1, fighter.Hand.Length);
+            int randomCard = Random.Range(0, fighter.Hand.Length);
+
+            for (int i = 0; i < randomDiscard; ++i)
+            {
+                while (visitedCards.Contains(randomCard))
+                    randomCard = Random.Range(0, fighter.Hand.Length);
+                visitedCards.Add(randomCard);
+                discardCards.Add(fighter.Hand[randomCard]);
+            }
+        }
+        else if (aiDifficulty == 2)
+        {
+            // IA is a genious
+            int threshold = 4;
+
+            for (int i = 0; i < fighter.Hand.Length; ++i)
+            {
+                if (fighter.Hand[i].card.type == CardType.COMBO_MIDDLE && fighter.Hand[i].card.damage <= threshold)
+                {
+                    discardCards.Add(fighter.Hand[i]);
+                }
+            }
+
+            if (discardCards.Count == 0)
+            {
+                int lowestDamage = 50;
+                CardMap lowestCard = new CardMap();
+                for (int i = 0; i < fighter.Hand.Length; ++i)
+                {
+                    if (fighter.Hand[i].card.damage < lowestDamage)
+                    {
+                        lowestDamage = fighter.Hand[i].card.damage;
+                        lowestCard = fighter.Hand[i];
+                    }
+                }
+
+                discardCards.Add(lowestCard);
+            }
         }
 
         return discardCards;
