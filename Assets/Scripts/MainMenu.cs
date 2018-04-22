@@ -19,17 +19,8 @@ public class MainMenu : MonoBehaviour {
 
     public void StartGame()
     {
+        ToggleButtons(false);
         Fader.Instance.FadeOut(() => SceneManager.LoadScene("MainGame"));
-    }
-
-    public void ShowCredits()
-    {
-
-    }
-
-    public void Back()
-    {
-
     }
 
     public void ShowConfirmation()
