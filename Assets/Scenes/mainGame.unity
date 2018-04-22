@@ -1884,6 +1884,10 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1659515295905006, guid: 7c0dbf9dcaf37d347bd9ac78319e22eb, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7c0dbf9dcaf37d347bd9ac78319e22eb, type: 2}
   m_IsPrefabParent: 0
@@ -2895,6 +2899,7 @@ GameObject:
   - component: {fileID: 1303084570}
   - component: {fileID: 1303084569}
   - component: {fileID: 1303084568}
+  - component: {fileID: 1303084572}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2965,6 +2970,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1303084572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1303084567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bce84fdf69e8c048bda683fa6cf85dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeAmount: 0.7
+  decreaseFactor: 1
 --- !u!4 &1317844467 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4581084210983324, guid: 87c0cad748323b9489bd1751e6313c2e,
@@ -4485,6 +4503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b221dc6146418e240ae4241ee6cfe87c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerChar: {fileID: 412166071}
+  enemyChar: {fileID: 1548518158}
   playerHealthController: {fileID: 1298042301}
   enemyHealthController: {fileID: 997940092}
   playerCombatTextController: {fileID: 1298042302}

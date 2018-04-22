@@ -20,6 +20,9 @@ public class Game : MonoBehaviour {
 
     public static Game Instance;
 
+    public Transform playerChar;
+    public Transform enemyChar;
+
     public HealthBarController playerHealthController;
     public HealthBarController enemyHealthController;
 
@@ -85,13 +88,12 @@ public class Game : MonoBehaviour {
     private void Start()
     {
         Fader.Instance.FadeIn(() => InitGame());
+        ToggleCardsAndActions(false);
     }
 
     public void InitGame()
     {
         finalState.gameObject.SetActive(false);
-        ToggleCardsAndActions(false);
-
         playerDamage = 0;
         enemyDamage = 0;
 
@@ -226,8 +228,6 @@ public class Game : MonoBehaviour {
 
     private IEnumerator AnimateNewCards(CardMap[] selectedCards)
     {
-        ToggleCardsAndActions(false);
-
         for (int i = 0; i < selectedCards.Length; ++i)
         {
             Transform newCard = handReference.GetChild(selectedCards[i].index);
@@ -240,8 +240,6 @@ public class Game : MonoBehaviour {
 
             newCard.DOScale(1f, .2f);
         }
-
-        ToggleCardsAndActions(true);
     }
 
     private int GetRemainingTime()
@@ -291,15 +289,26 @@ public class Game : MonoBehaviour {
             case GameState.DAMAGE_PHASE:
                 if (clockTimer != null) StopCoroutine(clockTimer);
                 ToggleCardsAndActions(false);
+
+                CameraShaker.Instance.DoShake(0.5f, 0.05f);
                 Debug.Log("[GAMESTATE] Damage phase");
 
                 //Fancy animations and apply damage to both players and also health bars
                 Debug.Log("[DAMAGE] Player did " + playerDamage + " to Computer");
                 enemyHealthController.PrintDamage(enemy.ApplyDamage(playerDamage));
                 enemyHealthTextController.ShowText(enemy.Health.ToString());
+
                 string enemyText = playerDamage + "";
+
                 if (enemy.DefensePoints != 1)
+                {
                     enemyText += "\nBLOCKED (" + (enemy.DefensePoints * 100).ToString("n2") + "%)";
+                    GuardAnimation(enemyChar);
+                }
+                else
+                {
+                    CombatAnimation(enemyChar, playerChar);
+                }
                 enemyCombatTextController.ShowText(enemyText);
                 state = enemy.CheckFighterState();
 
@@ -308,9 +317,18 @@ public class Game : MonoBehaviour {
                 Debug.Log("[DAMAGE] Computer did " + enemyDamage + " to Player");
                 playerHealthController.PrintDamage(player.ApplyDamage(enemyDamage));
                 playerHealthTextController.ShowText(player.Health.ToString());
+
                 string playerText = enemyDamage + "";
+
                 if (player.DefensePoints != 1)
+                {
                     playerText += "\nBLOCKED (" + (player.DefensePoints * 100).ToString("n2") + "%)";
+                    GuardAnimation(playerChar);
+                }
+                else
+                {
+                    CombatAnimation(playerChar, enemyChar);
+                }
                 playerCombatTextController.ShowText(playerText);
                 state = player.CheckFighterState();
 
@@ -343,7 +361,7 @@ public class Game : MonoBehaviour {
 
     private void FinalState(String text)
     {
-        finalState.GetComponentInChildren<Text>(true).text = "Game Over";
+        finalState.GetComponentInChildren<Text>(true).text = text;
         finalState.gameObject.SetActive(true);
         StartCoroutine(BackToMainMenu());
     }
@@ -480,5 +498,16 @@ public class Game : MonoBehaviour {
         yield return new WaitForSeconds(3f);
 
         Fader.Instance.FadeOut(() => SceneManager.LoadScene("MainMenu"));
+    }
+
+    private void CombatAnimation(Transform source, Transform target)
+    {
+        Vector3 offset = new Vector3(0f, 0.5f, 0f);
+        source.DOPunchPosition(target.position + offset, 0.5f);
+    }
+
+    private void GuardAnimation(Transform source)
+    {
+        source.DOShakeScale(0.5f, 0.5f);
     }
 }
