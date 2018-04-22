@@ -2874,8 +2874,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9dccdfd4a8accc94cbf5bbd3aab5f369, type: 2}
   guardConfirmation: {fileID: 846497850}
   finalState: {fileID: 1704797889}
-  initProportions: 40
-  finisherProportions: 10
+  initProportions: 36
+  finisherProportions: 9
   deckSize: 100
   readyButton: {fileID: 1933303072}
   guardButton: {fileID: 387040366}

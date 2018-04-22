@@ -33,7 +33,7 @@ public class Game : MonoBehaviour {
     public CanvasGroup guardConfirmation;
     public CanvasGroup finalState;
 
-    public int initProportions = 41;
+    public int initProportions = 36;
     public int finisherProportions = 9;
 
     public int deckSize = 100;
