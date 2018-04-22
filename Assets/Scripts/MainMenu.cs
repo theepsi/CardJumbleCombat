@@ -17,6 +17,7 @@ public class MainMenu : MonoBehaviour {
     public void Start()
     {
         ToggleButtons(false);
+        difficultSelection.value = EnemyDifficulty.AIDifficulty;
         Fader.Instance.FadeIn(() => ToggleButtons(true));
     }
 
