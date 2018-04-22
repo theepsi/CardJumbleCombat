@@ -10,6 +10,8 @@ public class CombatTextController : MonoBehaviour {
 
     public void ShowText(string text)
     {
+        combatText.transform.DOKill();
+
         combatText.text = text;
         combatText.gameObject.SetActive(true);
         Vector3 offset = new Vector3(1.5f, 1.5f, 1f);
