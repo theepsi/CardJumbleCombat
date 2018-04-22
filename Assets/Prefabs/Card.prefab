@@ -176,7 +176,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 640e5c6613bd469449b003f54f239715, type: 3}
+    m_Font: {fileID: 12800000, guid: 884769511c3132849b9885964ab49f63, type: 3}
     m_FontSize: 172
     m_FontStyle: 0
     m_BestFit: 1
@@ -243,7 +243,6 @@ MonoBehaviour:
   cardCover: {fileID: 114786937304728766}
   artwork: {fileID: 114570079943733176}
   description: {fileID: 114705099316101870}
-  color: {r: 1, g: 1, b: 1, a: 1}
   selected: 0
 --- !u!222 &222386834286650090
 CanvasRenderer:
