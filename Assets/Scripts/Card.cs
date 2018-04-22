@@ -19,7 +19,7 @@ public class Card : ScriptableObject {
     
     public void Print()
     {
-        Debug.Log(description + "-" + type);
+        Debug.Log("[CARD]" + description + "-" + type);
     }
 	
 }

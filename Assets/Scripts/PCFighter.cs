@@ -10,14 +10,42 @@ public class PCFighter {
         this.fighter = fighter;
     }
 
-    public int SelectCombo()
+    public int Play()
     {
         List<List<CardMap>> possibleCombinations = GenerateAllCombinations();
 
-        int randomCombo = Random.Range(0, possibleCombinations.Count);
-        return fighter.PlayCards(possibleCombinations[randomCombo]);
+        if (possibleCombinations.Count == 0)
+        {
+            // TODO: Play guard and decide which ones does he change
+            List<CardMap> discardCards = GetCardToDiscard();
+            Debug.Log("[GUARD] Computer - GUARD YES");
 
-        //TODO: if no combo, play guard and decide which ones does he change
+            fighter.Guard(discardCards);
+            return 0;
+
+        } else
+        {
+            int randomCombo = Random.Range(0, possibleCombinations.Count);
+            return fighter.PlayCards(possibleCombinations[randomCombo]);
+        }
+    }
+
+    private List<CardMap> GetCardToDiscard()
+    {
+        List<CardMap> discardCards = new List<CardMap>();
+        List<int> visitedCards = new List<int>();
+        int randomDiscard = Random.Range(1, fighter.Hand.Length);
+        int randomCard = Random.Range(0, fighter.Hand.Length);
+
+        for (int i = 0; i < randomDiscard; ++i)
+        {
+            while (visitedCards.Contains(randomCard))
+                randomCard = Random.Range(0, fighter.Hand.Length);
+            visitedCards.Add(randomCard);
+            discardCards.Add(fighter.Hand[randomCard]);
+        }
+
+        return discardCards;
     }
 
     private List<List<CardMap>> GenerateAllCombinations()
@@ -36,21 +64,8 @@ public class PCFighter {
             else finisherCards.Add(hand[i]);
         }
 
-        Debug.Log("Middle cards");
-        for (int i = 0; i < middleCards.Count; ++i)
-        {
-            middleCards[i].card.Print();
-        }
-
         // Get all possible combinations of middle cards
         List<List<CardMap>> middleCardsCombinations = GenerateCombinations(middleCards, new List<List<CardMap>>());
-
-        for (int i = 0; i < middleCardsCombinations.Count; ++i)
-        {
-            Debug.Log("Combination " + i);
-            for (int j = 0; j < middleCardsCombinations[i].Count; ++j)
-                middleCardsCombinations[i][j].card.Print();
-        }
 
         for (int i = 0; i < initCards.Count; ++i)
         {

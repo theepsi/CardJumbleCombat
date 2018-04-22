@@ -14,13 +14,13 @@ public class HealthBarController : MonoBehaviour {
         healthSliderRed.fillAmount = 1;
     }
 
-    public void ApplyDamage(int amount)
+    public void PrintDamage(int amount)
     {
-        healthSlider.fillAmount -= amount / 100f;
-        StartCoroutine(ApplyDamageRed(amount / 100f));
+        healthSlider.fillAmount -= amount / 150f;
+        StartCoroutine(PrintDamageRed(amount / 150f));
     }
 
-    IEnumerator ApplyDamageRed(float amount)
+    IEnumerator PrintDamageRed(float amount)
     {
         float duration = 1f;
         float increment = 0.01f;
