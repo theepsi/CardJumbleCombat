@@ -16,7 +16,7 @@ public class Card : ScriptableObject {
     public int damage;
 
     public CardType type;
-
+    
     public void Print()
     {
         Debug.Log(description + "-" + type);
