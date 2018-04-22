@@ -66,7 +66,7 @@ public class MainMenu : MonoBehaviour {
         DismissConfirmation();
     }
 
-    private void ToggleButtons(bool toggle)
+    public void ToggleButtons(bool toggle)
     {
         for (int i = 0; i < elementsToDisable.Length; ++i)
         {
