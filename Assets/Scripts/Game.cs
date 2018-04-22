@@ -18,6 +18,9 @@ public class Game : MonoBehaviour {
     public HealthBarController playerHealthController;
     public HealthBarController enemyHealthController;
 
+    public CombatTextController playerCombatTextController;
+    public CombatTextController enemyCombatTextController;
+
     public EventSystem eventSystem;
 
     public Transform handReference;
@@ -184,12 +187,20 @@ public class Game : MonoBehaviour {
                 //Fancy animations and apply damage to both players and also health bars
                 Debug.Log("[DAMAGE] Player did " + playerDamage + " to Computer");
                 enemyHealthController.PrintDamage(enemy.ApplyDamage(playerDamage));
+                string enemyText = playerDamage + "";
+                if (enemy.DefensePoints != 1)
+                    enemyText += "\nBLOCKED (" + (enemy.DefensePoints * 100).ToString("n2") + "%)";
+                enemyCombatTextController.ShowText(enemyText);
                 state = enemy.CheckFighterState();
 
                 if (state == GameState.KO_PHASE) break;
 
                 Debug.Log("[DAMAGE] Computer did " + enemyDamage + " to Player");
                 playerHealthController.PrintDamage(player.ApplyDamage(enemyDamage));
+                string playerText = enemyDamage + "";
+                if (player.DefensePoints != 1)
+                    playerText += "\nBLOCKED (" + (player.DefensePoints * 100).ToString("n2") + "%)";
+                playerCombatTextController.ShowText(playerText);
                 state = player.CheckFighterState();
 
                 if (state == GameState.KO_PHASE) break;
