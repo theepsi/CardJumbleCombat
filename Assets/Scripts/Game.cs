@@ -75,6 +75,8 @@ public class Game : MonoBehaviour {
 
     private Coroutine clockTimer;
 
+    private bool escaping;
+
     private void Awake()
     {
         // Singleton
@@ -89,6 +91,16 @@ public class Game : MonoBehaviour {
     {
         Fader.Instance.FadeIn(() => InitGame());
         ToggleCardsAndActions(false);
+        escaping = false;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !escaping)
+        {
+            StartCoroutine(BackToMainMenu(0.1f));
+            escaping = true;
+        }
     }
 
     public void InitGame()
@@ -363,7 +375,7 @@ public class Game : MonoBehaviour {
     {
         finalState.GetComponentInChildren<Text>(true).text = text;
         finalState.gameObject.SetActive(true);
-        StartCoroutine(BackToMainMenu());
+        StartCoroutine(BackToMainMenu(3f));
     }
 
     private void DisplayPlayerHand(CardMap[] hand)
@@ -493,9 +505,9 @@ public class Game : MonoBehaviour {
         data.DOScale(new Vector3(1f, 1f, 1f), .5f);
     }
 
-    private IEnumerator BackToMainMenu()
+    private IEnumerator BackToMainMenu(float waitTime)
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(waitTime);
 
         Fader.Instance.FadeOut(() => SceneManager.LoadScene("MainMenu"));
     }

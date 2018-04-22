@@ -1452,6 +1452,7 @@ GameObject:
   - component: {fileID: 556354716}
   - component: {fileID: 556354718}
   - component: {fileID: 556354717}
+  - component: {fileID: 556354719}
   m_Layer: 5
   m_Name: Board
   m_TagString: Untagged
@@ -1512,6 +1513,28 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 556354715}
+--- !u!114 &556354719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 556354715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
 --- !u!1 &570664000
 GameObject:
   m_ObjectHideFlags: 0
@@ -2981,8 +3004,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bce84fdf69e8c048bda683fa6cf85dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shakeAmount: 0.7
-  decreaseFactor: 1
 --- !u!4 &1317844467 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4581084210983324, guid: 87c0cad748323b9489bd1751e6313c2e,
@@ -3857,10 +3878,10 @@ RectTransform:
   m_Father: {fileID: 556354716}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 680, y: 0}
-  m_SizeDelta: {x: 1200, y: 295}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1200, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1708044329
 MonoBehaviour:
@@ -3874,16 +3895,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 50
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: 22
-  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
-  m_ChildControlHeight: 1
+  m_ChildControlHeight: 0
 --- !u!1 &1714406332
 GameObject:
   m_ObjectHideFlags: 0
@@ -3988,10 +4009,10 @@ RectTransform:
   m_Father: {fileID: 556354716}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: 0}
-  m_SizeDelta: {x: 600, y: 295}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 600, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1729279541
 GameObject:
