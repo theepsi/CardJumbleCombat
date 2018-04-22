@@ -90,12 +90,14 @@ public class Fighter {
         if (currentHealth <= 0)
         {
             Debug.Log("[END] Fighter has lost: " + name);
+            if (name == "Computer") return GameState.WIN_PHASE;
             return GameState.KO_PHASE;
         }
 
         else if (!hasOneCardOfType(CardType.COMBO_INIT, hand) && deck.Count == 0)
         {
             Debug.Log("[END] Fighter has lost: " + name);
+            if (name == "Computer") return GameState.WIN_PHASE;
             return GameState.KO_PHASE;
         }
         
