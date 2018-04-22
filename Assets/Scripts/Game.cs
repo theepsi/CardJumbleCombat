@@ -8,7 +8,8 @@ public enum GameState
 {
     PREPARATION_PHASE,
     DAMAGE_PHASE,
-    KO_PHASE
+    KO_PHASE,
+    WIN_PHASE
 }
 
 public class Game : MonoBehaviour {
@@ -30,7 +31,7 @@ public class Game : MonoBehaviour {
     public List<Card> availableFinisherCards;
 
     public CanvasGroup guardConfirmation;
-    public CanvasGroup gameOver;
+    public CanvasGroup finalState;
 
     public int initProportions = 41;
     public int finisherProportions = 9;
@@ -72,7 +73,7 @@ public class Game : MonoBehaviour {
 
     public void InitGame()
     {
-        gameOver.gameObject.SetActive(false);
+        finalState.gameObject.SetActive(false);
         ToggleCardsAndActions(true);
 
         playerDamage = 0;
@@ -200,7 +201,7 @@ public class Game : MonoBehaviour {
                 enemyCombatTextController.ShowText(enemyText);
                 state = enemy.CheckFighterState();
 
-                if (state == GameState.KO_PHASE) { ChangeState(state); break; }
+                if (state == GameState.KO_PHASE || state == GameState.WIN_PHASE) { ChangeState(state); break; }
 
                 Debug.Log("[DAMAGE] Computer did " + enemyDamage + " to Player");
                 playerHealthController.PrintDamage(player.ApplyDamage(enemyDamage));
@@ -210,7 +211,7 @@ public class Game : MonoBehaviour {
                 playerCombatTextController.ShowText(playerText);
                 state = player.CheckFighterState();
 
-                if (state == GameState.KO_PHASE) { ChangeState(state); break; }
+                if (state == GameState.KO_PHASE || state == GameState.WIN_PHASE) { ChangeState(state); break; }
 
                 playerDamage = 0;
                 enemyDamage = 0;
@@ -226,6 +227,12 @@ public class Game : MonoBehaviour {
                 Debug.Log("[GAMESTATE] KO phase");
                 GameOver();
                 break;
+            case GameState.WIN_PHASE:
+                eventSystem.enabled = true;
+                ToggleCardsAndActions(false);
+                Debug.Log("[GAMESTATE] WIN phase");
+                PlayerWins();
+                break;
         }
 
         currentState = state;
@@ -233,7 +240,14 @@ public class Game : MonoBehaviour {
 
     public void GameOver()
     {
-        gameOver.gameObject.SetActive(true);
+        finalState.GetComponentInChildren<Text>(true).text = "Game Over";
+        finalState.gameObject.SetActive(true);
+    }
+
+    public void PlayerWins()
+    {
+        finalState.GetComponentInChildren<Text>(true).text = "You WIN";
+        finalState.gameObject.SetActive(true);
     }
 
     private void DisplayPlayerHand(CardMap[] hand)
