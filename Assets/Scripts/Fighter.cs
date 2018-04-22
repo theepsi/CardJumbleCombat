@@ -122,11 +122,14 @@ public class Fighter {
 
     public int ApplyDamage(int damage)
     {
-        int recivedDamage = Mathf.RoundToInt(damage * defensePoints);
-        currentHealth -= recivedDamage;
-        Debug.Log("[DAMAGE] " + name + " recived " + recivedDamage);
+        int recievedDamage = Mathf.RoundToInt(damage * defensePoints);
+        currentHealth -= recievedDamage;
 
-        return recivedDamage;
+        if (currentHealth < 0) currentHealth = 0;
+
+        Debug.Log("[DAMAGE] " + name + " recived " + recievedDamage);
+
+        return recievedDamage;
     }
 
     private void DiscardCards(List<CardMap> cardsToDiscard)

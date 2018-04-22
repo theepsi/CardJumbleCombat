@@ -225,7 +225,7 @@ Prefab:
     - target: {fileID: 114502729265407964, guid: 105d00a9b574b954d999dfb044ca5df4,
         type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224651926528111378, guid: 105d00a9b574b954d999dfb044ca5df4,
         type: 2}
@@ -346,6 +346,40 @@ Prefab:
         type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1873502006534394, guid: 105d00a9b574b954d999dfb044ca5df4, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114502729265407964, guid: 105d00a9b574b954d999dfb044ca5df4,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114502729265407964, guid: 105d00a9b574b954d999dfb044ca5df4,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114502729265407964, guid: 105d00a9b574b954d999dfb044ca5df4,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114502729265407964, guid: 105d00a9b574b954d999dfb044ca5df4,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 2005932979}
+    - target: {fileID: 114502729265407964, guid: 105d00a9b574b954d999dfb044ca5df4,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: RestartClock
+      objectReference: {fileID: 0}
+    - target: {fileID: 114502729265407964, guid: 105d00a9b574b954d999dfb044ca5df4,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 105d00a9b574b954d999dfb044ca5df4, type: 2}
@@ -2800,7 +2834,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 2005932979}
           m_MethodName: DoGuard
-          m_Mode: 1
+          m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3072,6 +3106,17 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 1677596373}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 2005932979}
+          m_MethodName: StopClock
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -3358,7 +3403,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 30
+  m_Text: --
 --- !u!222 &1714406335
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3546,7 +3591,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1875151835
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3916,7 +3961,6 @@ MonoBehaviour:
   enemyCombatTextController: {fileID: 997940093}
   playerHealthTextController: {fileID: 1298042303}
   enemyHealthTextController: {fileID: 997940094}
-  eventSystem: {fileID: 570664002}
   handReference: {fileID: 1708044328}
   availableInitCards:
   - {fileID: 11400000, guid: 1fe9dd0d0c9a9e44ab0c83eee1005b1c, type: 2}
@@ -3938,8 +3982,10 @@ MonoBehaviour:
   guardConfirmation: {fileID: 846497850}
   invalidPlay: {fileID: 913195617}
   finalState: {fileID: 1704797889}
+  clock: {fileID: 1875151835}
   initProportions: 36
   finisherProportions: 9
+  timePerTurn: 10
   deckSize: 100
   readyButton: {fileID: 1933303072}
   guardButton: {fileID: 387040366}

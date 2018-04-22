@@ -28,7 +28,7 @@ public class Game : MonoBehaviour {
     public HealthTextController playerHealthTextController;
     public HealthTextController enemyHealthTextController;
 
-    public EventSystem eventSystem;
+    //public EventSystem eventSystem;
 
     public Transform handReference;
 
@@ -40,8 +40,12 @@ public class Game : MonoBehaviour {
     public CanvasGroup invalidPlay;
     public CanvasGroup finalState;
 
+    public Transform clock;
+
     public int initProportions = 36;
     public int finisherProportions = 9;
+
+    public int timePerTurn = 10;
 
     public int deckSize = 100;
 
@@ -65,6 +69,8 @@ public class Game : MonoBehaviour {
 
     private Stack<Card> playerDeck;
 
+    private Coroutine clockTimer;
+
     private void Awake()
     {
         // Singleton
@@ -83,7 +89,7 @@ public class Game : MonoBehaviour {
     public void InitGame()
     {
         finalState.gameObject.SetActive(false);
-        ToggleCardsAndActions(true);
+        ToggleCardsAndActions(false);
 
         playerDamage = 0;
         enemyDamage = 0;
@@ -150,9 +156,14 @@ public class Game : MonoBehaviour {
         }
     }
 
-    public void DoGuard()
+    public void DoGuard(bool timeOut = false)
     {
-        List<CardMap> selectedCards = GetSelectedCards();
+        List<CardMap> selectedCards;
+
+        if (!timeOut)
+            selectedCards = GetSelectedCards();
+        else
+            selectedCards = new List<CardMap>();
 
         Debug.Log("[GUARD] Player - GUARD YES");
         //With Guard button you will use your selected cards as defense, so you will have some defense points and you wont attack this turn. The more you discard, the less you defend.
@@ -232,17 +243,53 @@ public class Game : MonoBehaviour {
         ToggleCardsAndActions(true);
     }
 
+    private int GetRemainingTime()
+    {
+        Text countdown = clock.GetComponentInChildren<Text>();
+        return int.Parse(countdown.text);
+    }
+
+    private IEnumerator StartClock(int timeForChoosing)
+    {
+        int currentTime = timeForChoosing;
+        Text countdown = clock.GetComponentInChildren<Text>();
+
+        countdown.text = currentTime + "";
+
+        while (currentTime >= 0)
+        {
+            yield return new WaitForSeconds(1f);
+
+            currentTime--;
+            countdown.text = currentTime + "";
+        }
+
+        DoGuard(true);
+    }
+
+    public void StopClock()
+    {
+        StopCoroutine(clockTimer);
+    }
+
+    public void RestartClock()
+    {
+        clockTimer = StartCoroutine(StartClock(GetRemainingTime()));
+    }
+
     private void ChangeState(GameState state)
     {
         //Entry point for state.
         switch (state)
         {
             case GameState.PREPARATION_PHASE:
-                eventSystem.enabled = true;
+                clockTimer = StartCoroutine(StartClock(timePerTurn));
+                ToggleCardsAndActions(true);
                 Debug.Log("[GAMESTATE] Preparation phase");
                 break;
             case GameState.DAMAGE_PHASE:
-                eventSystem.enabled = false;
+                if (clockTimer != null) StopCoroutine(clockTimer);
+                ToggleCardsAndActions(false);
                 Debug.Log("[GAMESTATE] Damage phase");
 
                 //Fancy animations and apply damage to both players and also health bars
@@ -277,13 +324,13 @@ public class Game : MonoBehaviour {
 
                 break;
             case GameState.KO_PHASE:
-                eventSystem.enabled = true;
+                StopAllCoroutines();
                 ToggleCardsAndActions(false);
                 Debug.Log("[GAMESTATE] KO phase");
                 GameOver();
                 break;
             case GameState.WIN_PHASE:
-                eventSystem.enabled = true;
+                StopAllCoroutines();
                 ToggleCardsAndActions(false);
                 Debug.Log("[GAMESTATE] WIN phase");
                 PlayerWins();
@@ -408,7 +455,6 @@ public class Game : MonoBehaviour {
 
             cardBack.SetActive(true);
         }
-        
     }
 
     private void RemoveFromDisplayDeck(int amount)
