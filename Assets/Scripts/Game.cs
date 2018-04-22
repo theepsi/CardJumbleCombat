@@ -30,6 +30,7 @@ public class Game : MonoBehaviour {
     public List<Card> availableFinisherCards;
 
     public CanvasGroup guardConfirmation;
+    public CanvasGroup gameOver;
 
     public int initProportions = 41;
     public int finisherProportions = 9;
@@ -71,6 +72,9 @@ public class Game : MonoBehaviour {
 
     public void InitGame()
     {
+        gameOver.gameObject.SetActive(false);
+        ToggleCardsAndActions(true);
+
         playerDamage = 0;
         enemyDamage = 0;
 
@@ -78,6 +82,9 @@ public class Game : MonoBehaviour {
         player = new Fighter();
         enemy = new Fighter();
         pcFighter = new PCFighter(enemy);
+
+        playerHealthController.Init();
+        enemyHealthController.Init();
 
         // change game state to preparation
         playerDeck = GenerateRandomDeck();
@@ -193,7 +200,7 @@ public class Game : MonoBehaviour {
                 enemyCombatTextController.ShowText(enemyText);
                 state = enemy.CheckFighterState();
 
-                if (state == GameState.KO_PHASE) break;
+                if (state == GameState.KO_PHASE) { ChangeState(state); break; }
 
                 Debug.Log("[DAMAGE] Computer did " + enemyDamage + " to Player");
                 playerHealthController.PrintDamage(player.ApplyDamage(enemyDamage));
@@ -203,7 +210,7 @@ public class Game : MonoBehaviour {
                 playerCombatTextController.ShowText(playerText);
                 state = player.CheckFighterState();
 
-                if (state == GameState.KO_PHASE) break;
+                if (state == GameState.KO_PHASE) { ChangeState(state); break; }
 
                 playerDamage = 0;
                 enemyDamage = 0;
@@ -214,12 +221,19 @@ public class Game : MonoBehaviour {
 
                 break;
             case GameState.KO_PHASE:
-                eventSystem.enabled = false;
+                eventSystem.enabled = true;
+                ToggleCardsAndActions(false);
                 Debug.Log("[GAMESTATE] KO phase");
+                GameOver();
                 break;
         }
 
         currentState = state;
+    }
+
+    public void GameOver()
+    {
+        gameOver.gameObject.SetActive(true);
     }
 
     private void DisplayPlayerHand(CardMap[] hand)
