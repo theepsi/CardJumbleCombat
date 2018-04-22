@@ -4,12 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour {
 
     public EventTrigger[] elementsToDisable;
 
     public Transform confirmationDialog;
+
+    public Slider difficultSelection;
 
     public void Start()
     {
@@ -20,6 +23,7 @@ public class MainMenu : MonoBehaviour {
     public void StartGame()
     {
         ToggleButtons(false);
+        EnemyDifficulty.AIDiffficulty = (int) difficultSelection.value;
         Fader.Instance.FadeOut(() => SceneManager.LoadScene("MainGame"));
     }
 
@@ -65,6 +69,7 @@ public class MainMenu : MonoBehaviour {
 
     public void ToggleButtons(bool toggle)
     {
+        difficultSelection.interactable = toggle;
         for (int i = 0; i < elementsToDisable.Length; ++i)
         {
             elementsToDisable[i].enabled = toggle;
