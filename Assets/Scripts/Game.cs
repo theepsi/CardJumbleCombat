@@ -72,6 +72,7 @@ public class Game : MonoBehaviour {
         player = new Fighter();
         enemy = new Fighter();
         pcFighter = new PCFighter(enemy);
+
         // change game state to preparation
         debugCards = new int[availableInitCards.Count + availableMiddleCards.Count + availableFinisherCards.Count];
         Stack<Card> deck = GenerateRandomDeck();
@@ -89,7 +90,7 @@ public class Game : MonoBehaviour {
 
     public void ReadyButton()
     {
-        List<Card> selectedCards = GetSelectedCards();
+        List<CardMap> selectedCards = GetSelectedCards();
 
         if (selectedCards.Count > 0)
         {
@@ -116,7 +117,7 @@ public class Game : MonoBehaviour {
 
     public void DoGuard()
     {
-        List<Card> selectedCards = GetSelectedCards();
+        List<CardMap> selectedCards = GetSelectedCards();
 
         Debug.Log("GUARD YES");
         //With Guard button you will use your selected cards as defense, so you will have some defense points and you wont attack this turn. The more you discard, the less you defend.
@@ -126,7 +127,8 @@ public class Game : MonoBehaviour {
 
         DisplayPlayerHand(player.Hand);
 
-        //Enemy damage;
+        //TOOD: AI attacking
+        enemyDamage = pcFighter.SelectCombo();
 
         DismissGuard();
 
@@ -139,7 +141,7 @@ public class Game : MonoBehaviour {
 
         ToggleCardsAndActions(false);
 
-        List<Card> selectedCards = GetSelectedCards();
+        List<CardMap> selectedCards = GetSelectedCards();
 
         if (selectedCards.Count > 0)
         {
@@ -203,7 +205,7 @@ public class Game : MonoBehaviour {
         Debug.Log("ChangeState to " + currentState.ToString());
     }
 
-    private void DisplayPlayerHand(Card[] hand)
+    private void DisplayPlayerHand(CardMap[] hand)
     {
         CleanHand();
 
@@ -212,7 +214,6 @@ public class Game : MonoBehaviour {
             GameObject card = ObjectPooler.Instance.GetPooledObject("Card");
 
             card.transform.SetParent(handReference);
-            hand[i].indexAtHand = i;
             card.GetComponent<CardDisplayer>().InitCard(hand[i]);
             card.SetActive(true);
         }
@@ -249,13 +250,13 @@ public class Game : MonoBehaviour {
         return deck;
     }
 
-    private List<Card> GetSelectedCards()
+    private List<CardMap> GetSelectedCards()
     {
-        List<Card> returnList = new List<Card>();
+        List<CardMap> returnList = new List<CardMap>();
         CardDisplayer[] cards = handReference.GetComponentsInChildren<CardDisplayer>();
         for (int i = 0; i < cards.Length; ++i)
         {
-            if (cards[i].selected) returnList.Add(cards[i].card);
+            if (cards[i].selected) returnList.Add(cards[i].cardMap);
         }
         return returnList;
     }

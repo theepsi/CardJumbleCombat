@@ -12,7 +12,7 @@ public class PCFighter {
 
     public int SelectCombo()
     {
-        List<List<Card>> possibleCombinations = GenerateAllCombinations();
+        List<List<CardMap>> possibleCombinations = GenerateAllCombinations();
 
         int randomCombo = Random.Range(0, possibleCombinations.Count);
         return fighter.PlayCards(possibleCombinations[randomCombo]);
@@ -20,47 +20,47 @@ public class PCFighter {
         //TODO: if no combo, play guard and decide which ones does he change
     }
 
-    private List<List<Card>> GenerateAllCombinations()
+    private List<List<CardMap>> GenerateAllCombinations()
     {
-        Card[] hand = fighter.Hand;
-        List<List<Card>> possibleCombinations = new List<List<Card>>();
+        CardMap[] hand = fighter.Hand;
+        List<List<CardMap>> possibleCombinations = new List<List<CardMap>>();
 
-        List<Card> initCards = new List<Card>();
-        List<Card> middleCards = new List<Card>();
-        List<Card> finisherCards = new List<Card>();
+        List<CardMap> initCards = new List<CardMap>();
+        List<CardMap> middleCards = new List<CardMap>();
+        List<CardMap> finisherCards = new List<CardMap>();
 
         for (int i = 0; i < hand.Length; ++i)
         {
-            if (hand[i].type == CardType.COMBO_INIT) initCards.Add(hand[i]);
-            else if (hand[i].type == CardType.COMBO_MIDDLE) middleCards.Add(hand[i]);
+            if (hand[i].card.type == CardType.COMBO_INIT) initCards.Add(hand[i]);
+            else if (hand[i].card.type == CardType.COMBO_MIDDLE) middleCards.Add(hand[i]);
             else finisherCards.Add(hand[i]);
         }
 
         Debug.Log("Middle cards");
         for (int i = 0; i < middleCards.Count; ++i)
         {
-            middleCards[i].Print();
+            middleCards[i].card.Print();
         }
 
         // Get all possible combinations of middle cards
-        List<List<Card>> middleCardsCombinations = GenerateCombinations(middleCards, new List<List<Card>>());
+        List<List<CardMap>> middleCardsCombinations = GenerateCombinations(middleCards, new List<List<CardMap>>());
 
         for (int i = 0; i < middleCardsCombinations.Count; ++i)
         {
             Debug.Log("Combination " + i);
             for (int j = 0; j < middleCardsCombinations[i].Count; ++j)
-                middleCardsCombinations[i][j].Print();
+                middleCardsCombinations[i][j].card.Print();
         }
 
         for (int i = 0; i < initCards.Count; ++i)
         {
-            List<Card> comboInit = new List<Card>();
+            List<CardMap> comboInit = new List<CardMap>();
             comboInit.Add(initCards[i]);
             possibleCombinations.Add(comboInit);
 
             for (int j = 0; j < middleCardsCombinations.Count; ++j)
             {
-                List<Card> comboInitMiddle = new List<Card>(comboInit);
+                List<CardMap> comboInitMiddle = new List<CardMap>(comboInit);
 
                 for (int k = 0; k < middleCardsCombinations[j].Count; ++k)
                 {
@@ -71,7 +71,7 @@ public class PCFighter {
 
                 for (int k = 0; k < finisherCards.Count; ++k)
                 {
-                    List<Card> comboInitMiddleFinisher = new List<Card>(comboInitMiddle);
+                    List<CardMap> comboInitMiddleFinisher = new List<CardMap>(comboInitMiddle);
                     comboInitMiddleFinisher.Add(finisherCards[k]);
                     possibleCombinations.Add(comboInitMiddleFinisher);
                 }
@@ -81,16 +81,16 @@ public class PCFighter {
         return possibleCombinations;
     }
 
-    private List<List<Card>> GenerateCombinations(List<Card> list, List<List<Card>> listCombinations)
+    private List<List<CardMap>> GenerateCombinations(List<CardMap> list, List<List<CardMap>> listCombinations)
     {
-        List<List<Card>> allCombinations = new List<List<Card>>(listCombinations);
-        List<List<Card>> combinationsGenerated = new List<List<Card>>();
+        List<List<CardMap>> allCombinations = new List<List<CardMap>>(listCombinations);
+        List<List<CardMap>> combinationsGenerated = new List<List<CardMap>>();
 
         if (listCombinations.Count == 0)
         {
             for (int i = 0; i < list.Count; ++i)
             {
-                List<Card> simple = new List<Card>();
+                List<CardMap> simple = new List<CardMap>();
                 simple.Add(list[i]);
                 allCombinations.Add(simple);
                 combinationsGenerated.Add(simple);
@@ -105,7 +105,7 @@ public class PCFighter {
                 {
                     if (!listCombinations[i].Contains(list[j]))
                     {
-                        List<Card> combination = new List<Card>(listCombinations[i]);
+                        List<CardMap> combination = new List<CardMap>(listCombinations[i]);
                         combination.Add(list[j]);
                         if (!ListInListOfLists(combination, allCombinations))
                         {
@@ -119,7 +119,7 @@ public class PCFighter {
 
         if (combinationsGenerated.Count != 0)
         {
-            List<List<Card>> recursivelyGenerated = GenerateCombinations(list, allCombinations);
+            List<List<CardMap>> recursivelyGenerated = GenerateCombinations(list, allCombinations);
             for (int i = 0; i < recursivelyGenerated.Count; ++i)
             {
                 combinationsGenerated.Add(recursivelyGenerated[i]);
@@ -129,11 +129,11 @@ public class PCFighter {
         return combinationsGenerated;
     }
 
-    private bool ListInListOfLists(List<Card> list, List<List<Card>> listOfLists)
+    private bool ListInListOfLists(List<CardMap> list, List<List<CardMap>> listOfLists)
     {
         for (int i = 0; i < listOfLists.Count; ++i)
         {
-            List<Card> listCopy = new List<Card>(list);
+            List<CardMap> listCopy = new List<CardMap>(list);
             bool listOfListsElementNotInList = false;
 
             for (int j = 0; j < listOfLists[i].Count; ++j)

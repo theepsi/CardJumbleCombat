@@ -7,17 +7,17 @@ public class CardDisplayer : MonoBehaviour {
     public Image cardCover;
     public Image artwork;
     public Text description;
-    public Card card;
+    public CardMap cardMap;
 
     public bool selected;
 
-    public void InitCard (Card card)
+    public void InitCard (CardMap cardMap)
     {
         transform.DORestart();
-        this.card = card;
+        this.cardMap = cardMap;
         selected = false;
 
-        switch (card.type)
+        switch (cardMap.card.type)
         {
             case CardType.COMBO_INIT:
                 cardCover.sprite = Resources.Load<Sprite>("BaseCards/InitCard");
@@ -30,8 +30,8 @@ public class CardDisplayer : MonoBehaviour {
                 break;
         }
 
-        artwork.sprite = card.artwork;
-        description.text = card.description;
+        artwork.sprite = cardMap.card.artwork;
+        description.text = cardMap.card.description;
 
         transform.DOScale(new Vector3(1f, 1f, 1f), .5f);
         transform.DOLocalMoveY(0, .5f);
