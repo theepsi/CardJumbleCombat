@@ -80,8 +80,8 @@ public class Game : MonoBehaviour {
         playerDeck = GenerateRandomDeck();
         Stack<Card> enemyDeck = GenerateRandomDeck();
 
-        player.Init(Shuffle(playerDeck));
-        enemy.Init(Shuffle(enemyDeck));
+        player.Init(Shuffle(playerDeck), "Player");
+        enemy.Init(Shuffle(enemyDeck), "Computer");
 
         DisplayPlayerHand(player.Hand);
 
