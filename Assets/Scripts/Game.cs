@@ -47,6 +47,7 @@ public class Game : MonoBehaviour {
 
     public EventTrigger readyButton;
     public EventTrigger guardButton;
+    public EventTrigger helpButton;
 
     public Text guardConfirmationText;
     public Text invalidPlayText;
@@ -392,6 +393,7 @@ public class Game : MonoBehaviour {
 
         readyButton.enabled = toggle;
         guardButton.enabled = toggle;
+        helpButton.enabled = toggle;
     }
 
     private void DisplayDeck(Stack<Card> deck)
@@ -419,5 +421,15 @@ public class Game : MonoBehaviour {
                 Destroy(lastDeckCard.gameObject);
             });
         }
+    }
+
+    public void ButtonEnter(Transform data)
+    {
+        data.DOScale(new Vector3(1.3f, 1.3f, 1f), .5f);
+    }
+
+    public void ButtonExit(Transform data)
+    {
+        data.DOScale(new Vector3(1f, 1f, 1f), .5f);
     }
 }
