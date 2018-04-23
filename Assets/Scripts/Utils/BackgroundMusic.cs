@@ -16,10 +16,7 @@ public class BackgroundMusic : MonoBehaviour {
             Instance = this;
         else if (Instance != this)
             Destroy(this);
-    }
-
-    // Use this for initialization
-    void Start () {
+        
         audioSource = GetComponent<AudioSource>();
     }
 
