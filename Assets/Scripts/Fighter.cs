@@ -81,10 +81,10 @@ public class Fighter {
     public bool CheckCards(List<CardMap> cardsToPlay)
     {
         if (!hasOneCardOfType(CardType.COMBO_INIT, cardsToPlay.ToArray())) return false;
-        else
-        {
-            if (hasOneCardOfType(CardType.COMBO_FINISHER, cardsToPlay.ToArray()) && !hasMiddleCards(cardsToPlay)) return false;
-        }
+
+        if (hasMoreThanOneCardOfType(CardType.COMBO_FINISHER, cardsToPlay.ToArray())) return false;
+
+        if (hasOneCardOfType(CardType.COMBO_FINISHER, cardsToPlay.ToArray()) && !hasMiddleCards(cardsToPlay)) return false;
 
         return true;
     }
@@ -177,6 +177,20 @@ public class Fighter {
         if (count == 0)
             return false;
         return true;
+    }
+
+    private bool hasMoreThanOneCardOfType(CardType type, CardMap[] list)
+    {
+        int count = 0;
+
+        for (int i = 0; i < list.Length; ++i)
+        {
+            if (list[i].card.type == type) count++;
+
+            if (count > 1) return true;
+        }
+
+        return false;
     }
 
     private bool hasMiddleCards(List<CardMap> list)

@@ -85,13 +85,14 @@ public class Game : MonoBehaviour {
         else if (Instance != this)
             Destroy(this);
     }
-
-    //DELETE
+    
     private void Start()
     {
         Fader.Instance.FadeIn(() => InitGame());
         ToggleCardsAndActions(false);
         escaping = false;
+
+        BackgroundMusic.Instance.FadeIn();
     }
 
     private void Update()
@@ -509,6 +510,7 @@ public class Game : MonoBehaviour {
     {
         yield return new WaitForSeconds(waitTime);
 
+        BackgroundMusic.Instance.FadeOut();
         Fader.Instance.FadeOut(() => SceneManager.LoadScene("MainMenu"));
     }
 

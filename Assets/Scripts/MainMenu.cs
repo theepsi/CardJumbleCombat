@@ -19,12 +19,14 @@ public class MainMenu : MonoBehaviour {
         ToggleButtons(false);
         difficultSelection.value = EnemyDifficulty.AIDifficulty;
         Fader.Instance.FadeIn(() => ToggleButtons(true));
+        BackgroundMusic.Instance.FadeIn();
     }
 
     public void StartGame()
     {
         ToggleButtons(false);
         EnemyDifficulty.AIDifficulty = (int) difficultSelection.value;
+        BackgroundMusic.Instance.FadeOut();
         Fader.Instance.FadeOut(() => SceneManager.LoadScene("MainGame"));
     }
 
